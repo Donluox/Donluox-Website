@@ -1,51 +1,42 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>我的 IP 位址查詢</title>
-  <meta name="description" content="MY IP查詢：查詢我的IP位址、代理、ISP、城市等資訊">
-  <meta name="keywords" content="IP查詢,my IP,查代理IP,查IP國家,ISP,城市">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的 IP 查詢</title>
   <style>
-    body { font-family: sans-serif; padding: 20px; background: #f9f9f9; color: #333; }
-    h1 { font-size: 1.8em; color: #0066cc; }
-    .info { background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 8px rgba(0,0,0,0.1); max-width: 700px; }
-    .info p { line-height: 1.6; }
-    .loading { color: #aaa; }
+    body { font-family: sans-serif; padding: 20px; background: #f0f0f0; }
+    h1 { color: #333; }
+    .info { background: #fff; padding: 20px; border-radius: 10px; max-width: 600px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .info p { margin: 10px 0; }
   </style>
 </head>
 <body>
-  <h1>🔍 我的 IP 位址與詳細資訊</h1>
+  <h1>🔍 我的 IP 詳細資訊</h1>
   <div class="info" id="ip-info">
-    <p class="loading">資料查詢中，請稍候...</p>
+    <p>讀取中...</p>
   </div>
 
   <script>
-    async function fetchIPInfo() {
-      const box = document.getElementById('ip-info');
+    async function loadIPInfo() {
+      const box = document.getElementById("ip-info");
       try {
-        const res = await fetch("https://ip-api.com/json/?lang=zh-TW");
+        const res = await fetch("https://ipinfo.io/json?token=ce9b0d8a6f1607"); // 免費 token，每月5萬次
         const data = await res.json();
 
-        if (data.status === "success") {
-          box.innerHTML = `
-            <p><strong>📌 IP 位址：</strong> ${data.query}</p>
-            <p><strong>🌍 國家 / 城市：</strong> ${data.country}（${data.regionName}, ${data.city}）</p>
-            <p><strong>🏢 ISP（網路供應商）：</strong> ${data.isp}</p>
-            <p><strong>🧭 地區代碼：</strong> ${data.region}，郵遞區號 ${data.zip}</p>
-            <p><strong>🕓 時區：</strong> ${data.timezone}</p>
-            <p><strong>🛰 經緯度：</strong> ${data.lat}, ${data.lon}</p>
-            <p><strong>🏢 組織名稱：</strong> ${data.org}</p>
-          `;
-        } else {
-          box.innerHTML = `<p>❌ 查詢失敗：${data.message}</p>`;
-        }
-      } catch (e) {
-        box.innerHTML = `<p>❌ 錯誤：${e.message}</p>`;
+        box.innerHTML = `
+          <p><strong>📌 IP 位址：</strong> ${data.ip}</p>
+          <p><strong>🌍 城市 / 國家：</strong> ${data.city}, ${data.region}, ${data.country}</p>
+          <p><strong>📡 ISP / 組織：</strong> ${data.org}</p>
+          <p><strong>🧭 地理位置座標：</strong> ${data.loc}</p>
+          <p><strong>⏰ 時區：</strong> ${data.timezone}</p>
+        `;
+      } catch (error) {
+        box.innerHTML = `<p>❌ 無法取得 IP 資訊：${error.message}</p>`;
       }
     }
 
-    fetchIPInfo();
+    loadIPInfo();
   </script>
 </body>
 </html>
