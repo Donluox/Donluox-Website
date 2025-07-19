@@ -1,175 +1,27 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
+
+<!DOCTYPE HTML>
+<html lang="zh-TW">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Donluox 的博客</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <style>
-    .youtube-float-button {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background-color: #FF0000;
-      color: white;
-      padding: 12px 16px;
-      border-radius: 9999px;
-      font-weight: bold;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      z-index: 9999;
-      transition: transform 0.3s ease;
-    }
-    .youtube-float-button:hover {
-      transform: scale(1.05);
-      background-color: #cc0000;
-    }
-    .article-header img {
-      width: 100%;
-      height: auto;
-      border-radius: 8px;
-    }
-    .contact-box {
-      background-color: #f9fafb;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      margin-top: 20px;
-    }
-    .donate-box {
-      background-color: #f9fafb;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      margin-top: 30px;
-    }
-    .donate-box img {
-      width: 120px;
-      height: 120px;
-      margin-right: 10px;
-      cursor: pointer;
-    }
-  </style>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0">
+	<title>我的IP位址查詢</title>
+	<meta name="description" content="MY IP查詢:查詢我的IP位址,查代理IP,查IP國家,以及查IP真實位址">
+	<meta name="keywords" content="IP,IP查詢,my IP,查IP,IP位址,what is my IP,我的IP,whatismyip,IP查詢器,查我的IP,我的IP位址,我的IP國家,偵測我的IP,查詢我的IP,查看我的IP,顯示我的IP,my IP address,my IP proxy">
+	<link rel="canonical" href="https://www.whatismyip.com.tw/">
+	<link rel="alternate" hreflang="x-default" href="https://www.whatismyip.com.tw/">
+	<link rel="alternate" hreflang="zh-TW" href="https://www.whatismyip.com.tw/tw/">
+	<link rel="alternate" hreflang="zh-CN" href="https://www.whatismyip.com.tw/cn/">
+	<link rel="alternate" hreflang="en" href="https://www.whatismyip.com.tw/en/">
+	<link rel="alternate" hreflang="es" href="https://www.whatismyip.com.tw/es/">
+	<link rel="alternate" hreflang="ja" href="https://www.whatismyip.com.tw/ja/">
+	<style>#ip,#ip-real{font-size:1.5em;font-weight:bold;}#ip-country,#ip-real-country{font-style:italic;}#footer{margin-top:2em;}</style>
 </head>
-<body class="bg-gray-100 text-gray-800">
-  <header class="bg-blue-600 text-white p-6 shadow-md">
-    <div class="max-w-5xl mx-auto flex items-center justify-between">
-      <h1 class="text-3xl font-bold">Donluox 的博客</h1>
-      <nav>
-        <a href="/" class="text-white hover:underline ml-4">主页</a>
-        <a href="/about" class="text-white hover:underline ml-4">关于我</a>
-        <a href="/contact" class="text-white hover:underline ml-4">联系方式</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="max-w-5xl mx-auto px-4 py-8">
-    <section class="mb-12">
-      <h2 class="text-2xl font-semibold mb-4">最新文章</h2>
-
-      <!-- GitHub 入门教程 -->
-      <article class="bg-white p-6 rounded-lg shadow-md mb-6">
-        <div class="article-header">
-          <img src="path_to_image.jpg" alt="GitHub 入门教程" />
-        </div>
-        <h3 class="text-xl font-bold mb-2">
-          <a href="posts/github-basics.html" class="text-blue-700 hover:underline">GitHub 入门教程：如何开始你的项目</a>
-        </h3>
-        <p class="text-gray-600 text-sm">发表于 2025年7月15日</p>
-        <p class="mt-4">GitHub 是开发者和程序员最常用的平台之一，它提供了版本控制和协作开发功能。本教程将教你如何创建 GitHub 账户，初始化一个 Git 仓库，并将代码推送到 GitHub。</p>
-        <a href="posts/github-basics.html" class="text-blue-600 mt-4 inline-block">阅读全文 →</a>
-      </article>
-
-      <!-- Cloudflare 设置 -->
-      <article class="bg-white p-6 rounded-lg shadow-md mb-6">
-        <div class="article-header">
-          <img src="path_to_image_2.jpg" alt="Cloudflare 设置" />
-        </div>
-        <h3 class="text-xl font-bold mb-2">
-          <a href="posts/cloudflare-setup.html" class="text-blue-700 hover:underline">如何使用 Cloudflare 提升你的网站性能</a>
-        </h3>
-        <p class="text-gray-600 text-sm">发表于 2025年7月16日</p>
-        <p class="mt-4">Cloudflare 提供 CDN 和 DNS 加速服务，能够帮助你的网站更快地加载，同时提供更高的安全性。本文将详细介绍如何设置 Cloudflare，提升网站访问速度和安全性。</p>
-        <a href="posts/cloudflare-setup.html" class="text-blue-600 mt-4 inline-block">阅读全文 →</a>
-      </article>
-
-      <!-- GTA5 线上模式更新 -->
-      <article class="bg-white p-6 rounded-lg shadow-md mb-6">
-        <div class="article-header">
-          <img src="path_to_image_3.jpg" alt="GTA5 线上模式" />
-        </div>
-        <h3 class="text-xl font-bold mb-2">
-          <a href="posts/gta5-online-update.html" class="text-blue-700 hover:underline">GTA5 线上模式：最新更新与玩法介绍</a>
-        </h3>
-        <p class="text-gray-600 text-sm">发表于 2025年7月17日</p>
-        <p class="mt-4">GTA5 线上模式不断更新，新增了许多有趣的任务、武器和载具。本篇文章将介绍 GTA5 线上模式的最新更新，分析新内容如何影响游戏玩法。</p>
-        <a href="posts/gta5-online-update.html" class="text-blue-600 mt-4 inline-block">阅读全文 →</a>
-      </article>
-
-      <!-- Minecraft 游戏机制解析 -->
-      <article class="bg-white p-6 rounded-lg shadow-md mb-6">
-        <div class="article-header">
-          <img src="path_to_image_4.jpg" alt="Minecraft 游戏机制" />
-        </div>
-        <h3 class="text-xl font-bold mb-2">
-          <a href="posts/minecraft-mechanics.html" class="text-blue-700 hover:underline">Minecraft 游戏机制深度解析</a>
-        </h3>
-        <p class="text-gray-600 text-sm">发表于 2025年7月18日</p>
-        <p class="mt-4">Minecraft 是一个充满无限可能的沙盒游戏，本文将深入探讨游戏的机制，包括生物生成、红石电路、世界生成等。</p>
-        <a href="posts/minecraft-mechanics.html" class="text-blue-600 mt-4 inline-block">阅读全文 →</a>
-      </article>
-
-      <!-- 台湾美食与旅游推荐 -->
-      <article class="bg-white p-6 rounded-lg shadow-md mb-6">
-        <div class="article-header">
-          <img src="path_to_image_5.jpg" alt="台湾美食与旅游" />
-        </div>
-        <h3 class="text-xl font-bold mb-2">
-          <a href="posts/taiwan-tourism.html" class="text-blue-700 hover:underline">探索台湾：美食与旅游推荐</a>
-        </h3>
-        <p class="text-gray-600 text-sm">发表于 2025年7月19日</p>
-        <p class="mt-4">台湾是一个融合了现代与传统的美丽地方，除了丰富的历史文化，还有许多绝佳的旅游景点和美食。本文将为你推荐台湾的必吃美食和必游景点。</p>
-        <a href="posts/taiwan-tourism.html" class="text-blue-600 mt-4 inline-block">阅读全文 →</a>
-      </article>
-
-      <!-- 澳洲生活篇 -->
-      <article class="bg-white p-6 rounded-lg shadow-md mb-6">
-        <div class="article-header">
-          <img src="path_to_image_6.jpg" alt="澳洲生活" />
-        </div>
-        <h3 class="text-xl font-bold mb-2">
-          <a href="posts/australia-living.html" class="text-blue-700 hover:underline">生活在澳洲：从学生到工作的一切</a>
-        </h3>
-        <p class="text-gray-600 text-sm">发表于 2025年7月20日</p>
-        <p class="mt-4">澳洲以其优质的教育体系、宜人的气候和多元文化吸引了大量国际学生。本文将为你分享在澳洲的生活经验，从住宿、学习到兼职和工作的一切。</p>
-        <a href="posts/australia-living.html" class="text-blue-600 mt-4 inline-block">阅读全文 →</a>
-      </article>
-    </section>
-
-    <section>
-      <h2 class="text-2xl font-semibold mb-4">联系方式</h2>
-      <div class="contact-box">
-        <p><strong>电子邮件：</strong><a href="mailto:yanyu4782@gmail.com" class="text-blue-600 hover:underline">yanyu4782@gmail.com</a></p>
-        <p><strong>电话：</strong><a href="tel:+4407593700296" class="text-blue-600 hover:underline">+4407593700296</a></p>
-      </div>
-    </section>
-
-    <!-- 赞赏支持 -->
-    <section class="donate-box">
-      <h3 class="text-2xl font-semibold mb-4">赞赏支持</h3>
-      <p>如果你喜欢我的内容，可以通过下面Dogecoin进行赞赏：D7rrYX3xFGhMNaS5TZUnHFzgawxnMqjSU9</p>
-      <a D7rrYX3xFGhMNaS5TZUnHFzgawxnMqjSU9" target="_blank">
-      </a>
-    </section>
-  </main>
-
-  <footer class="bg-gray-800 text-white py-6 mt-12">
-    <div class="max-w-5xl mx-auto text-center text-sm">
-      © 2025 Donluox. 本站使用 <a href="https://pages.github.com/" class="underline hover:text-blue-400" target="_blank">GitHub Pages</a> 构建。
-    </div>
-  </footer>
-
-  <a href="https://www.youtube.com/@Donluox6000" class="youtube-float-button" target="_blank">
-    🎥 订阅我的频道
-  </a>
+<body>
+	<!-- HEY DEVELOPERS! To avoid having your applications banned, please review our usage guidelines before integrating our service: https://www.whatismyip.com.tw/plans.html -->
+	<h1>IP位址</h1><span id="ip" data-ip="205.198.87.98">205.198.87.98</span> <span id="ip-country" data-ip-country="SG">SG</span>
+	<div id="footer"><a href="https://www.whoisip.me/tw/ip/205.198.87.98">WHOIS</a></div>
+	
+	<script type="application/json" id="ip-json">{"ip":"205.198.87.98","ip-country":"SG","ip-real":"","ip-real-country":""}</script>
+	<script>function JSOnload(){var n=document.createElement("script");n.src="https://www.googletagmanager.com/gtag/js?id=G-MHP90TR3ZP",document.body.appendChild(n)}function gtag(){dataLayer.push(arguments)}window.addEventListener?window.addEventListener("load",JSOnload,!1):window.attachEvent?window.attachEvent("onload",JSOnload):window.onload=JSOnload,window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-MHP90TR3ZP");</script>
 </body>
 </html>
