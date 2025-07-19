@@ -1,92 +1,116 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IP 地址查詢</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IP 詳細查詢工具 - 無需 API Key</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      color: #333;
-      padding: 2rem;
-    }
-    .container {
-      background: white;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9f9f9;
+      padding: 20px;
       max-width: 600px;
       margin: auto;
+      color: #333;
     }
     h1 {
-      font-size: 1.5rem;
+      text-align: center;
       margin-bottom: 1rem;
+      color: #0078d7;
     }
-    .info {
-      margin: 0.5rem 0;
-    }
-    #ipInput {
-      padding: 0.5rem;
+    input[type="text"] {
       width: 100%;
-      margin-bottom: 1rem;
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+      box-sizing: border-box;
     }
     button {
-      padding: 0.5rem 1rem;
-      background: #007bff;
-      border: none;
+      background-color: #0078d7;
       color: white;
-      border-radius: 4px;
+      border: none;
+      padding: 10px 15px;
+      font-size: 1rem;
+      border-radius: 6px;
       cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s ease;
     }
     button:hover {
-      background: #0056b3;
+      background-color: #005a9e;
+    }
+    .result {
+      margin-top: 20px;
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+    .error {
+      color: red;
+      font-weight: bold;
+    }
+    .label {
+      font-weight: 600;
+      color: #555;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🔍 IP 地址查詢工具</h1>
 
-    <input type="text" id="ipInput" placeholder="輸入 IP 位址 或留空查詢當前 IP" />
-    <button onclick="lookupIP()">查詢</button>
+  <h1>IP 詳細查詢工具（無需 API Key）</h1>
 
-    <div class="info" id="result"></div>
-  </div>
+  <input id="ipInput" type="text" placeholder="輸入 IP 位址，留空自動查詢當前 IP" />
+
+  <button id="searchBtn">查詢</button>
+
+  <div id="result" class="result">請輸入 IP 或直接點查詢獲取當前 IP 位置</div>
 
   <script>
-    async function lookupIP() {
-      const ip = document.getElementById("ipInput").value.trim();
-      const key = "cc8bff4e1dc871";
-      let apiURL = `https://pro.ip-api.com/json/${ip || ''}?key=${key}&fields=status,message,country,regionName,city,lat,lon,timezone,isp,query`;
+    const resultDiv = document.getElementById('result');
+    const ipInput = document.getElementById('ipInput');
+    const searchBtn = document.getElementById('searchBtn');
 
-      const resultDiv = document.getElementById("result");
-      resultDiv.innerHTML = "⌛ 查詢中...";
+    async function fetchIPInfo(ip) {
+      const url = ip ? `https://ipwho.is/${ip}` : 'https://ipwho.is/';
+      resultDiv.textContent = '⌛ 查詢中，請稍候...';
 
       try {
-        const response = await fetch(apiURL);
-        const data = await response.json();
+        const res = await fetch(url);
+        const data = await res.json();
 
-        if (data.status === "fail") {
-          resultDiv.innerHTML = `❌ 查詢失敗：${data.message}`;
-        } else {
-          resultDiv.innerHTML = `
-            📌 IP 位址：${data.query}<br>
-            🌍 城市 / 國家：${data.city}, ${data.regionName}, ${data.country}<br>
-            📡 ISP / 組織：${data.isp}<br>
-            🧭 地理位置座標：${data.lat}, ${data.lon}<br>
-            ⏰ 時區：${data.timezone}
-          `;
+        if (!data.success) {
+          resultDiv.innerHTML = `<p class="error">❌ 查詢失敗：${data.message || '未知錯誤'}</p>`;
+          return;
         }
+
+        resultDiv.innerHTML = `
+          <p><span class="label">📌 IP 位址：</span> ${data.ip}</p>
+          <p><span class="label">🌍 城市 / 省 / 國家：</span> ${data.city || '未知'}, ${data.region || '未知'}, ${data.country || '未知'}</p>
+          <p><span class="label">📡 ISP / 組織：</span> ${data.connection && data.connection.isp ? data.connection.isp : '未知'}</p>
+          <p><span class="label">🧭 經緯度：</span> ${data.latitude}, ${data.longitude}</p>
+          <p><span class="label">⏰ 時區：</span> ${data.timezone ? data.timezone.id : '未知'}</p>
+          <p><span class="label">📅 當地時間：</span> ${data.timezone ? new Date().toLocaleString('zh-TW', {timeZone: data.timezone.id}) : '未知'}</p>
+        `;
       } catch (err) {
-        resultDiv.innerHTML = `❌ 查詢失敗：${err.message}`;
+        resultDiv.innerHTML = `<p class="error">❌ 請求錯誤：${err.message}</p>`;
       }
     }
 
-    // 自動查詢當前 IP
-    window.addEventListener("load", () => {
-      lookupIP();
+    searchBtn.addEventListener('click', () => {
+      const ip = ipInput.value.trim();
+      fetchIPInfo(ip);
+    });
+
+    // 頁面載入時自動查詢訪客當前 IP
+    window.addEventListener('load', () => {
+      fetchIPInfo();
     });
   </script>
+
 </body>
 </html>
