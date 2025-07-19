@@ -1,27 +1,19 @@
-
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta name="viewport" content="width=device-width,initial-scale=1.0">
-	<title>我的IP位址查詢</title>
-	<meta name="description" content="MY IP查詢:查詢我的IP位址,查代理IP,查IP國家,以及查IP真實位址">
-	<meta name="keywords" content="IP,IP查詢,my IP,查IP,IP位址,what is my IP,我的IP,whatismyip,IP查詢器,查我的IP,我的IP位址,我的IP國家,偵測我的IP,查詢我的IP,查看我的IP,顯示我的IP,my IP address,my IP proxy">
-	<link rel="canonical" href="https://www.whatismyip.com.tw/">
-	<link rel="alternate" hreflang="x-default" href="https://www.whatismyip.com.tw/">
-	<link rel="alternate" hreflang="zh-TW" href="https://www.whatismyip.com.tw/tw/">
-	<link rel="alternate" hreflang="zh-CN" href="https://www.whatismyip.com.tw/cn/">
-	<link rel="alternate" hreflang="en" href="https://www.whatismyip.com.tw/en/">
-	<link rel="alternate" hreflang="es" href="https://www.whatismyip.com.tw/es/">
-	<link rel="alternate" hreflang="ja" href="https://www.whatismyip.com.tw/ja/">
-	<style>#ip,#ip-real{font-size:1.5em;font-weight:bold;}#ip-country,#ip-real-country{font-style:italic;}#footer{margin-top:2em;}</style>
+  <meta charset="utf-8">
+  <title>顯示我的 IP</title>
 </head>
 <body>
-	<!-- HEY DEVELOPERS! To avoid having your applications banned, please review our usage guidelines before integrating our service: https://www.whatismyip.com.tw/plans.html -->
-	<h1>IP位址</h1><span id="ip" data-ip="205.198.87.98">205.198.87.98</span> <span id="ip-country" data-ip-country="SG">SG</span>
-	<div id="footer"><a href="https://www.whoisip.me/tw/ip/205.198.87.98">WHOIS</a></div>
-	
-	<script type="application/json" id="ip-json">{"ip":"205.198.87.98","ip-country":"SG","ip-real":"","ip-real-country":""}</script>
-	<script>function JSOnload(){var n=document.createElement("script");n.src="https://www.googletagmanager.com/gtag/js?id=G-MHP90TR3ZP",document.body.appendChild(n)}function gtag(){dataLayer.push(arguments)}window.addEventListener?window.addEventListener("load",JSOnload,!1):window.attachEvent?window.attachEvent("onload",JSOnload):window.onload=JSOnload,window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-MHP90TR3ZP");</script>
+  <h1>你的 IP 位址是：</h1>
+  <p id="ip">載入中...</p>
+
+  <script>
+    fetch('https://api.ipify.org?format=json')
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('ip').textContent = data.ip;
+      });
+  </script>
 </body>
 </html>
