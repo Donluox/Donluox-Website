@@ -1,116 +1,175 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>IP 詳細查詢工具 - 無需 API Key</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Donluox 的博客</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f9f9f9;
-      padding: 20px;
-      max-width: 600px;
-      margin: auto;
-      color: #333;
-    }
-    h1 {
-      text-align: center;
-      margin-bottom: 1rem;
-      color: #0078d7;
-    }
-    input[type="text"] {
-      width: 100%;
-      padding: 10px;
-      font-size: 1rem;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      margin-bottom: 10px;
-      box-sizing: border-box;
-    }
-    button {
-      background-color: #0078d7;
+    .youtube-float-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #FF0000;
       color: white;
-      border: none;
-      padding: 10px 15px;
-      font-size: 1rem;
-      border-radius: 6px;
-      cursor: pointer;
-      width: 100%;
-      transition: background-color 0.3s ease;
-    }
-    button:hover {
-      background-color: #005a9e;
-    }
-    .result {
-      margin-top: 20px;
-      background: white;
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.1);
-      font-size: 1.1rem;
-      line-height: 1.6;
-    }
-    .error {
-      color: red;
+      padding: 12px 16px;
+      border-radius: 9999px;
       font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      z-index: 9999;
+      transition: transform 0.3s ease;
     }
-    .label {
-      font-weight: 600;
-      color: #555;
+    .youtube-float-button:hover {
+      transform: scale(1.05);
+      background-color: #cc0000;
+    }
+    .article-header img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+    .contact-box {
+      background-color: #f9fafb;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-top: 20px;
+    }
+    .donate-box {
+      background-color: #f9fafb;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-top: 30px;
+    }
+    .donate-box img {
+      width: 120px;
+      height: 120px;
+      margin-right: 10px;
+      cursor: pointer;
     }
   </style>
 </head>
-<body>
+<body class="bg-gray-100 text-gray-800">
+  <header class="bg-blue-600 text-white p-6 shadow-md">
+    <div class="max-w-5xl mx-auto flex items-center justify-between">
+      <h1 class="text-3xl font-bold">Donluox 的博客</h1>
+      <nav>
+        <a href="/" class="text-white hover:underline ml-4">主页</a>
+        <a href="/about" class="text-white hover:underline ml-4">关于我</a>
+        <a href="/contact" class="text-white hover:underline ml-4">联系方式</a>
+      </nav>
+    </div>
+  </header>
 
-  <h1>IP 詳細查詢工具（無需 API Key）</h1>
+  <main class="max-w-5xl mx-auto px-4 py-8">
+    <section class="mb-12">
+      <h2 class="text-2xl font-semibold mb-4">最新文章</h2>
 
-  <input id="ipInput" type="text" placeholder="輸入 IP 位址，留空自動查詢當前 IP" />
+      <!-- GitHub 入门教程 -->
+      <article class="bg-white p-6 rounded-lg shadow-md mb-6">
+        <div class="article-header">
+          <img src="path_to_image.jpg" alt="GitHub 入门教程" />
+        </div>
+        <h3 class="text-xl font-bold mb-2">
+          <a href="posts/github-basics.html" class="text-blue-700 hover:underline">GitHub 入门教程：如何开始你的项目</a>
+        </h3>
+        <p class="text-gray-600 text-sm">发表于 2025年7月15日</p>
+        <p class="mt-4">GitHub 是开发者和程序员最常用的平台之一，它提供了版本控制和协作开发功能。本教程将教你如何创建 GitHub 账户，初始化一个 Git 仓库，并将代码推送到 GitHub。</p>
+        <a href="posts/github-basics.html" class="text-blue-600 mt-4 inline-block">阅读全文 →</a>
+      </article>
 
-  <button id="searchBtn">查詢</button>
+      <!-- Cloudflare 设置 -->
+      <article class="bg-white p-6 rounded-lg shadow-md mb-6">
+        <div class="article-header">
+          <img src="path_to_image_2.jpg" alt="Cloudflare 设置" />
+        </div>
+        <h3 class="text-xl font-bold mb-2">
+          <a href="posts/cloudflare-setup.html" class="text-blue-700 hover:underline">如何使用 Cloudflare 提升你的网站性能</a>
+        </h3>
+        <p class="text-gray-600 text-sm">发表于 2025年7月16日</p>
+        <p class="mt-4">Cloudflare 提供 CDN 和 DNS 加速服务，能够帮助你的网站更快地加载，同时提供更高的安全性。本文将详细介绍如何设置 Cloudflare，提升网站访问速度和安全性。</p>
+        <a href="posts/cloudflare-setup.html" class="text-blue-600 mt-4 inline-block">阅读全文 →</a>
+      </article>
 
-  <div id="result" class="result">請輸入 IP 或直接點查詢獲取當前 IP 位置</div>
+      <!-- GTA5 线上模式更新 -->
+      <article class="bg-white p-6 rounded-lg shadow-md mb-6">
+        <div class="article-header">
+          <img src="path_to_image_3.jpg" alt="GTA5 线上模式" />
+        </div>
+        <h3 class="text-xl font-bold mb-2">
+          <a href="posts/gta5-online-update.html" class="text-blue-700 hover:underline">GTA5 线上模式：最新更新与玩法介绍</a>
+        </h3>
+        <p class="text-gray-600 text-sm">发表于 2025年7月17日</p>
+        <p class="mt-4">GTA5 线上模式不断更新，新增了许多有趣的任务、武器和载具。本篇文章将介绍 GTA5 线上模式的最新更新，分析新内容如何影响游戏玩法。</p>
+        <a href="posts/gta5-online-update.html" class="text-blue-600 mt-4 inline-block">阅读全文 →</a>
+      </article>
 
-  <script>
-    const resultDiv = document.getElementById('result');
-    const ipInput = document.getElementById('ipInput');
-    const searchBtn = document.getElementById('searchBtn');
+      <!-- Minecraft 游戏机制解析 -->
+      <article class="bg-white p-6 rounded-lg shadow-md mb-6">
+        <div class="article-header">
+          <img src="path_to_image_4.jpg" alt="Minecraft 游戏机制" />
+        </div>
+        <h3 class="text-xl font-bold mb-2">
+          <a href="posts/minecraft-mechanics.html" class="text-blue-700 hover:underline">Minecraft 游戏机制深度解析</a>
+        </h3>
+        <p class="text-gray-600 text-sm">发表于 2025年7月18日</p>
+        <p class="mt-4">Minecraft 是一个充满无限可能的沙盒游戏，本文将深入探讨游戏的机制，包括生物生成、红石电路、世界生成等。</p>
+        <a href="posts/minecraft-mechanics.html" class="text-blue-600 mt-4 inline-block">阅读全文 →</a>
+      </article>
 
-    async function fetchIPInfo(ip) {
-      const url = ip ? `https://ipwho.is/${ip}` : 'https://ipwho.is/';
-      resultDiv.textContent = '⌛ 查詢中，請稍候...';
+      <!-- 台湾美食与旅游推荐 -->
+      <article class="bg-white p-6 rounded-lg shadow-md mb-6">
+        <div class="article-header">
+          <img src="path_to_image_5.jpg" alt="台湾美食与旅游" />
+        </div>
+        <h3 class="text-xl font-bold mb-2">
+          <a href="posts/taiwan-tourism.html" class="text-blue-700 hover:underline">探索台湾：美食与旅游推荐</a>
+        </h3>
+        <p class="text-gray-600 text-sm">发表于 2025年7月19日</p>
+        <p class="mt-4">台湾是一个融合了现代与传统的美丽地方，除了丰富的历史文化，还有许多绝佳的旅游景点和美食。本文将为你推荐台湾的必吃美食和必游景点。</p>
+        <a href="posts/taiwan-tourism.html" class="text-blue-600 mt-4 inline-block">阅读全文 →</a>
+      </article>
 
-      try {
-        const res = await fetch(url);
-        const data = await res.json();
+      <!-- 澳洲生活篇 -->
+      <article class="bg-white p-6 rounded-lg shadow-md mb-6">
+        <div class="article-header">
+          <img src="path_to_image_6.jpg" alt="澳洲生活" />
+        </div>
+        <h3 class="text-xl font-bold mb-2">
+          <a href="posts/australia-living.html" class="text-blue-700 hover:underline">生活在澳洲：从学生到工作的一切</a>
+        </h3>
+        <p class="text-gray-600 text-sm">发表于 2025年7月20日</p>
+        <p class="mt-4">澳洲以其优质的教育体系、宜人的气候和多元文化吸引了大量国际学生。本文将为你分享在澳洲的生活经验，从住宿、学习到兼职和工作的一切。</p>
+        <a href="posts/australia-living.html" class="text-blue-600 mt-4 inline-block">阅读全文 →</a>
+      </article>
+    </section>
 
-        if (!data.success) {
-          resultDiv.innerHTML = `<p class="error">❌ 查詢失敗：${data.message || '未知錯誤'}</p>`;
-          return;
-        }
+    <section>
+      <h2 class="text-2xl font-semibold mb-4">联系方式</h2>
+      <div class="contact-box">
+        <p><strong>电子邮件：</strong><a href="mailto:yanyu4782@gmail.com" class="text-blue-600 hover:underline">yanyu4782@gmail.com</a></p>
+        <p><strong>电话：</strong><a href="tel:+4407593700296" class="text-blue-600 hover:underline">+4407593700296</a></p>
+      </div>
+    </section>
 
-        resultDiv.innerHTML = `
-          <p><span class="label">📌 IP 位址：</span> ${data.ip}</p>
-          <p><span class="label">🌍 城市 / 省 / 國家：</span> ${data.city || '未知'}, ${data.region || '未知'}, ${data.country || '未知'}</p>
-          <p><span class="label">📡 ISP / 組織：</span> ${data.connection && data.connection.isp ? data.connection.isp : '未知'}</p>
-          <p><span class="label">🧭 經緯度：</span> ${data.latitude}, ${data.longitude}</p>
-          <p><span class="label">⏰ 時區：</span> ${data.timezone ? data.timezone.id : '未知'}</p>
-          <p><span class="label">📅 當地時間：</span> ${data.timezone ? new Date().toLocaleString('zh-TW', {timeZone: data.timezone.id}) : '未知'}</p>
-        `;
-      } catch (err) {
-        resultDiv.innerHTML = `<p class="error">❌ 請求錯誤：${err.message}</p>`;
-      }
-    }
+    <!-- 赞赏支持 -->
+    <section class="donate-box">
+      <h3 class="text-2xl font-semibold mb-4">赞赏支持</h3>
+      <p>如果你喜欢我的内容，可以通过下面Dogecoin进行赞赏：D7rrYX3xFGhMNaS5TZUnHFzgawxnMqjSU9</p>
+      <a D7rrYX3xFGhMNaS5TZUnHFzgawxnMqjSU9" target="_blank">
+      </a>
+    </section>
+  </main>
 
-    searchBtn.addEventListener('click', () => {
-      const ip = ipInput.value.trim();
-      fetchIPInfo(ip);
-    });
+  <footer class="bg-gray-800 text-white py-6 mt-12">
+    <div class="max-w-5xl mx-auto text-center text-sm">
+      © 2025 Donluox. 本站使用 <a href="https://pages.github.com/" class="underline hover:text-blue-400" target="_blank">GitHub Pages</a> 构建。
+    </div>
+  </footer>
 
-    // 頁面載入時自動查詢訪客當前 IP
-    window.addEventListener('load', () => {
-      fetchIPInfo();
-    });
-  </script>
-
+  <a href="https://www.youtube.com/@Donluox6000" class="youtube-float-button" target="_blank">
+    🎥 订阅我的频道
+  </a>
 </body>
 </html>
