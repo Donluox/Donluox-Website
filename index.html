@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>IP 詳細查詢工具 - 無需 API Key</title>
+  <title>IP 詳細查詢工具 + 系統圖標</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -58,11 +58,16 @@
       font-weight: 600;
       color: #555;
     }
+    .icon {
+      font-size: 1.3rem;
+      margin-right: 0.4rem;
+      vertical-align: middle;
+    }
   </style>
 </head>
 <body>
 
-  <h1>IP 詳細查詢工具（無需 API Key）</h1>
+  <h1>IP 詳細查詢工具（含系統圖標）</h1>
 
   <input id="ipInput" type="text" placeholder="輸入 IP 位址，留空自動查詢當前 IP" />
 
@@ -74,6 +79,40 @@
     const resultDiv = document.getElementById('result');
     const ipInput = document.getElementById('ipInput');
     const searchBtn = document.getElementById('searchBtn');
+
+    // 簡單判斷瀏覽器和系統
+    function detectOS() {
+      const ua = navigator.userAgent || navigator.vendor || window.opera;
+
+      if (/android/i.test(ua)) {
+        return { name: 'Android', icon: '🤖' };
+      }
+      if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) {
+        return { name: 'iOS', icon: '🍎' };
+      }
+      if (/Win/.test(ua)) {
+        return { name: 'Windows', icon: '🪟' };
+      }
+      if (/Mac/.test(ua)) {
+        return { name: 'MacOS', icon: '🍏' };
+      }
+      if (/Linux/.test(ua)) {
+        return { name: 'Linux', icon: '🐧' };
+      }
+      return { name: '未知系統', icon: '❓' };
+    }
+
+    function detectBrowser() {
+      const ua = navigator.userAgent;
+      if (ua.indexOf("Firefox") > -1) return "Firefox";
+      if (ua.indexOf("SamsungBrowser") > -1) return "Samsung Browser";
+      if (ua.indexOf("Opera") > -1 || ua.indexOf("OPR") > -1) return "Opera";
+      if (ua.indexOf("Trident") > -1) return "Internet Explorer";
+      if (ua.indexOf("Edge") > -1) return "Edge";
+      if (ua.indexOf("Chrome") > -1) return "Chrome";
+      if (ua.indexOf("Safari") > -1) return "Safari";
+      return "未知瀏覽器";
+    }
 
     async function fetchIPInfo(ip) {
       const url = ip ? `https://ipwho.is/${ip}` : 'https://ipwho.is/';
@@ -88,6 +127,9 @@
           return;
         }
 
+        const os = detectOS();
+        const browser = detectBrowser();
+
         resultDiv.innerHTML = `
           <p><span class="label">📌 IP 位址：</span> ${data.ip}</p>
           <p><span class="label">🌍 城市 / 省 / 國家：</span> ${data.city || '未知'}, ${data.region || '未知'}, ${data.country || '未知'}</p>
@@ -95,6 +137,8 @@
           <p><span class="label">🧭 經緯度：</span> ${data.latitude}, ${data.longitude}</p>
           <p><span class="label">⏰ 時區：</span> ${data.timezone ? data.timezone.id : '未知'}</p>
           <p><span class="label">📅 當地時間：</span> ${data.timezone ? new Date().toLocaleString('zh-TW', {timeZone: data.timezone.id}) : '未知'}</p>
+          <p><span class="label">🖥️ 操作系統：</span> <span class=\"icon\">${os.icon}</span> ${os.name}</p>
+          <p><span class="label">🌐 瀏覽器：</span> ${browser}</p>
         `;
       } catch (err) {
         resultDiv.innerHTML = `<p class="error">❌ 請求錯誤：${err.message}</p>`;
@@ -106,7 +150,6 @@
       fetchIPInfo(ip);
     });
 
-    // 頁面載入時自動查詢訪客當前 IP
     window.addEventListener('load', () => {
       fetchIPInfo();
     });
