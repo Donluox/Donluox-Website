@@ -1,19 +1,67 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="utf-8">
-  <title>顯示我的 IP</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>我的 IP 位址與詳細資訊查詢</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      padding: 20px;
+      background: #f8f8f8;
+      color: #333;
+    }
+    h1 {
+      color: #0066cc;
+    }
+    .info {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      max-width: 600px;
+    }
+    .info p {
+      line-height: 1.6;
+    }
+    .loading {
+      color: #999;
+    }
+  </style>
 </head>
 <body>
-  <h1>你的 IP 位址是：</h1>
-  <p id="ip">載入中...</p>
+  <h1>🔍 我的 IP 與網路資訊</h1>
+  <div class="info" id="ip-info">
+    <p class="loading">資料載入中，請稍候...</p>
+  </div>
 
   <script>
-    fetch('https://api.ipify.org?format=json')
-      .then(response => response.json())
-      .then(data => {
-        document.getElementById('ip').textContent = data.ip;
-      });
+    async function loadIPInfo() {
+      const infoBox = document.getElementById('ip-info');
+      try {
+        const res = await fetch('https://ip-api.com/json/?lang=zh-TW'); // 自動根據用戶 IP 查詢
+        const data = await res.json();
+
+        if (data.status === "success") {
+          infoBox.innerHTML = `
+            <p><strong>💡 IP 位址：</strong> ${data.query}</p>
+            <p><strong>🌍 國家／城市：</strong> ${data.country}（${data.regionName}，${data.city}）</p>
+            <p><strong>🛰 網路服務供應商（ISP）：</strong> ${data.isp}</p>
+            <p><strong>⏰ 時區：</strong> ${data.timezone}</p>
+            <p><strong>📍 經緯度：</strong> ${data.lat}, ${data.lon}</p>
+            <p><strong>🏢 組織名稱：</strong> ${data.org}</p>
+            <p><strong>🧭 郵遞區號：</strong> ${data.zip}</p>
+            <p><strong>🖥 是否為代理或VPN：</strong> ${data.proxy ? '是' : '否'}（⚠️需升級版支援）</p>
+          `;
+        } else {
+          infoBox.innerHTML = `<p>查詢失敗：${data.message}</p>`;
+        }
+      } catch (e) {
+        infoBox.innerHTML = `<p>發生錯誤：${e.message}</p>`;
+      }
+    }
+
+    loadIPInfo();
   </script>
 </body>
 </html>
