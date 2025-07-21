@@ -1,119 +1,292 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-  <meta charset="UTF-8">
-  <title>🌐 IP 和系统信息查询</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IP 查询工具</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     body {
+      background-color: #111;
+      color: #fff;
       font-family: 'Segoe UI', sans-serif;
-      background: #f7f9fc;
-      color: #333;
-      padding: 20px;
+      padding: 30px;
     }
-
     .card {
-      background: #fff;
-      border-radius: 16px;
-      padding: 24px;
-      max-width: 600px;
-      margin: 0 auto;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+      background-color: #1e1e1e;
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+      transition: all 0.4s ease-in-out;
+      animation: fadeIn 0.6s ease;
     }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 24px;
+    .card:hover {
+      transform: scale(1.01);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
     }
-
-    .row {
-      display: flex;
-      justify-content: space-between;
-      margin: 10px 0;
-      font-size: 1.1rem;
+    .input-group {
+      margin-bottom: 20px;
     }
-
-    .label {
-      font-weight: bold;
+    input {
+      width: 100%;
+      padding: 10px 15px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      background-color: #222;
+      color: #eee;
     }
-
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #00c853;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: #fff;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background-color: #00e676;
+    }
+    .info span {
+      display: block;
+      margin-top: 10px;
+      font-size: 16px;
+    }
     .icon {
+      font-size: 18px;
+      margin-right: 6px;
+    }
+    .flag {
+      width: 24px;
+      height: 16px;
       vertical-align: middle;
+      margin-left: 6px;
+      border-radius: 2px;
+      box-shadow: 0 0 3px rgba(0,0,0,0.3);
+    }
+    .history-list {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #aaa;
+    }
+    .history-list span {
+      cursor: pointer;
+      color: #00e676;
+      margin-right: 12px;
+      user-select: none;
+    }
+    .history-list span:hover {
+      text-decoration: underline;
+    }
+    .loading {
+      display: inline-block;
       width: 20px;
       height: 20px;
-      margin-left: 6px;
+      border: 3px solid #00e676;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spin 1s linear infinite;
+      vertical-align: middle;
+      margin-left: 10px;
     }
-
-    .status {
-      text-align: center;
-      margin-top: 15px;
-      font-size: 0.95rem;
-      color: #888;
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
   </style>
 </head>
 <body>
 
-<div class="card">
-  <h2>🌐 IP 和系统信息查询</h2>
+  <div class="card">
+    <h2>🌐 当前 IP 查询</h2>
+    <div class="info" id="myIpInfo">查询中... <span class="loading" id="myIpLoading"></span></div>
+  </div>
 
-  <div class="row"><span class="label">当前 IP：</span><span id="ip">查询中...</span></div>
-  <div class="row"><span class="label">国家：</span><span id="country">-</span></div>
-  <div class="row"><span class="label">城市：</span><span id="city">-</span></div>
-  <div class="row"><span class="label">时区：</span><span id="timezone">-</span></div>
-  <div class="row"><span class="label">ISP：</span><span id="isp">-</span></div>
-  <div class="row"><span class="label">浏览器：</span><span id="browser">-</span></div>
-  <div class="row"><span class="label">系统：</span><span id="os">-</span></div>
-  <div class="status" id="status">数据获取中...</div>
-</div>
+  <div class="card">
+    <h2>🔍 手动查询其他 IP</h2>
+    <div class="input-group">
+      <input type="text" id="ipInput" placeholder="输入 IP 地址">
+      <button onclick="queryIP()">查询</button>
+    </div>
+    <div class="info" id="result"></div>
+    <div class="history-list" id="historyList"></div>
+  </div>
 
-<script>
-  async function getIPInfo() {
-    try {
-      const res = await fetch("https://ipwho.is/");
-      const data = await res.json();
+  <div class="card">
+    <h2>🖥️ 用户设备 / 浏览器</h2>
+    <div class="info" id="deviceInfo">加载中...</div>
+  </div>
 
-      if (!data.success) throw new Error("查询失败");
+  <script>
+    // 判断IP类型函数，支持IPv4和IPv6
+    function getIPVersion(ip) {
+      // IPv4简单正则：四段数字0~255
+      const ipv4Pattern = /^(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)){3}$/;
+      // IPv6简单正则：允许0-9,a-f,A-F和冒号（更复杂这里简化处理）
+      const ipv6Pattern = /^(([0-9a-fA-F]{1,4}):){7}([0-9a-fA-F]{1,4})$/;
 
-      document.getElementById("ip").textContent = data.ip;
-      document.getElementById("country").textContent = data.country;
-      document.getElementById("city").textContent = data.city;
-      document.getElementById("timezone").textContent = data.timezone?.id || "-";
-      document.getElementById("isp").textContent = data.connection?.isp || "-";
-
-      document.getElementById("status").textContent = "✅ 查询成功";
-    } catch (err) {
-      document.getElementById("status").textContent = "❌ Bro，查询失败，请检查网络";
-      document.getElementById("ip").textContent = "-";
+      if(ipv4Pattern.test(ip)) return "IPv4";
+      if(ipv6Pattern.test(ip)) return "IPv6";
+      return "未知类型";
     }
-  }
 
-  function getSystemInfo() {
-    const ua = navigator.userAgent;
-    const os = navigator.platform;
-    const browser = (() => {
-      if (ua.includes("Chrome")) return "Chrome";
-      if (ua.includes("Firefox")) return "Firefox";
-      if (ua.includes("Safari") && !ua.includes("Chrome")) return "Safari";
-      if (ua.includes("Edge")) return "Edge";
-      return "未知浏览器";
-    })();
+    function detectDevice() {
+      const ua = navigator.userAgent;
+      const el = document.getElementById("deviceInfo");
 
-    const isAndroid = /Android/.test(ua);
-    const isIOS = /iPhone|iPad|iPod/.test(ua);
+      let system = "未知系统";
+      let browser = "未知浏览器";
+      let iconSystem = "";
+      let iconBrowser = "";
 
-    const osText = isAndroid
-      ? 'Android <img class="icon" src="https://img.icons8.com/color/48/000000/android-os.png"/>'
-      : isIOS
-      ? 'iOS <img class="icon" src="https://img.icons8.com/ios-filled/50/000000/mac-os.png"/>'
-      : os;
+      if (/Android/i.test(ua)) {
+        system = "Android";
+        iconSystem = '<i class="fab fa-android"></i>';
+      } else if (/iPhone|iPad/i.test(ua)) {
+        system = "iOS";
+        iconSystem = '<i class="fab fa-apple"></i>';
+      } else if (/Windows/i.test(ua)) {
+        system = "Windows";
+        iconSystem = '<i class="fab fa-windows"></i>';
+      } else if (/Macintosh/i.test(ua)) {
+        system = "macOS";
+        iconSystem = '<i class="fab fa-apple"></i>';
+      }
 
-    document.getElementById("browser").textContent = browser;
-    document.getElementById("os").innerHTML = osText;
-  }
+      if (/Chrome/i.test(ua)) {
+        browser = "Chrome";
+        iconBrowser = '<i class="fab fa-chrome"></i>';
+      } else if (/Firefox/i.test(ua)) {
+        browser = "Firefox";
+        iconBrowser = '<i class="fab fa-firefox-browser"></i>';
+      } else if (/Safari/i.test(ua) && !/Chrome/i.test(ua)) {
+        browser = "Safari";
+        iconBrowser = '<i class="fab fa-safari"></i>';
+      } else if (/Edg/i.test(ua)) {
+        browser = "Edge";
+        iconBrowser = '<i class="fab fa-edge"></i>';
+      }
 
-  getSystemInfo();
-  getIPInfo();
-</script>
+      el.innerHTML = `💻 系统：${iconSystem} ${system}<br>🌐 浏览器：${iconBrowser} ${browser}`;
+    }
 
+    async function loadMyIP() {
+      const el = document.getElementById("myIpInfo");
+      const loadingEl = document.getElementById("myIpLoading");
+      try {
+        // 第一步拿到当前IP
+        const resIp = await fetch("https://api.ipify.org?format=json");
+        const { ip } = await resIp.json();
+
+        // 判断当前IP类型
+        const ipVersion = getIPVersion(ip);
+
+        // 第二步用ipapi获取详细信息
+        const res = await fetch(`https://ipapi.co/${ip}/json`);
+        const data = await res.json();
+        if(data.error) throw new Error(data.reason || "查询失败");
+
+        const flagUrl = data.country_code ? `https://flagcdn.com/w40/${data.country_code.toLowerCase()}.png` : '';
+        const flagImg = flagUrl ? `<img src="${flagUrl}" alt="国旗" class="flag" />` : '';
+
+        el.innerHTML = `
+          📌 IP：${data.ip} (${ipVersion}) ${flagImg} <br>
+          🌍 位置：${data.city}, ${data.region}, ${data.country_name} <br>
+          📡 ISP：${data.org || '未知'} <br>
+          🧭 经纬度：${data.latitude}, ${data.longitude} <br>
+          ⏰ 时区：${data.timezone}
+        `;
+      } catch (e) {
+        el.innerText = "❌ 查询失败，请稍后再试";
+      } finally {
+        loadingEl.style.display = "none";
+      }
+    }
+
+    async function queryIP() {
+      const ip = document.getElementById("ipInput").value.trim();
+      if (!ip) {
+        alert("请输入 IP 地址！");
+        return;
+      }
+      const resEl = document.getElementById("result");
+      resEl.innerHTML = '查询中... <span class="loading"></span>';
+
+      try {
+        const res = await fetch(`https://ipapi.co/${ip}/json`);
+        const data = await res.json();
+        if(data.error) throw new Error(data.reason || "查询失败");
+
+        // --- 新增代码：检测输入IP类型 ---
+        const ipVersion = getIPVersion(ip);
+        // -----------------------------------
+
+        const flagUrl = data.country_code ? `https://flagcdn.com/w40/${data.country_code.toLowerCase()}.png` : '';
+        const flagImg = flagUrl ? `<img src="${flagUrl}" alt="国旗" class="flag" />` : '';
+
+        resEl.innerHTML = `
+          📌 IP：${data.ip} (${ipVersion}) ${flagImg} <br>
+          🌍 位置：${data.city}, ${data.region}, ${data.country_name} <br>
+          📡 ISP：${data.org || '未知'} <br>
+          🧭 经纬度：${data.latitude}, ${data.longitude} <br>
+          ⏰ 时区：${data.timezone}
+        `;
+
+        saveHistory(ip);
+      } catch (e) {
+        resEl.innerHTML = `<span style="color:#ff5555;">❌ 查询失败：${e.message}</span>`;
+      }
+    }
+
+    // 历史记录相关
+    function getHistory() {
+      try {
+        return JSON.parse(localStorage.getItem("ipQueryHistory")) || [];
+      } catch {
+        return [];
+      }
+    }
+    function saveHistory(ip) {
+      let history = getHistory();
+      if (!history.includes(ip)) {
+        history.unshift(ip);
+        if (history.length > 5) history.pop();
+        localStorage.setItem("ipQueryHistory", JSON.stringify(history));
+      }
+      renderHistory();
+    }
+    function renderHistory() {
+      const history = getHistory();
+      const container = document.getElementById("historyList");
+      if (history.length === 0) {
+        container.innerHTML = "<em>暂无查询历史</em>";
+        return;
+      }
+      container.innerHTML = "查询历史: ";
+      history.forEach(ip => {
+        const span = document.createElement("span");
+        span.textContent = ip;
+        span.onclick = () => {
+          document.getElementById("ipInput").value = ip;
+          queryIP();
+        };
+        container.appendChild(span);
+      });
+    }
+
+    window.onload = () => {
+      detectDevice();
+      loadMyIP();
+      renderHistory();
+    };
+  </script>
 </body>
 </html>
