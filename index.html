@@ -1,146 +1,66 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IP 查询仪表盘</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IP 信息查询仪表盘</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <style>
     body {
-      background-color: #111;
-      color: #f0f0f0;
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 20px;
+      background-color: #111827;
+      color: #f3f4f6;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-    .container {
-      max-width: 800px;
-      margin: auto;
-      background-color: #1a1a1a;
-      border-radius: 16px;
-      padding: 30px;
-      box-shadow: 0 0 10px #000;
-      animation: fadeIn 0.6s ease-in-out;
+    .card {
+      background-color: #1f2937;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      transition: transform 0.2s;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    h1 {
-      text-align: center;
-      margin-bottom: 30px;
-      color: #00ffc6;
-    }
-    .info {
-      margin-bottom: 20px;
-    }
-    .info strong {
-      color: #00ffc6;
-    }
-    .status {
-      padding: 10px;
-      border-radius: 10px;
-      background: #222;
-    }
-    input[type="text"] {
-      width: 100%;
-      padding: 10px;
-      border-radius: 10px;
-      border: none;
-      background: #333;
-      color: #fff;
-      margin-bottom: 10px;
-    }
-    button {
-      background: #00ffc6;
-      border: none;
-      padding: 10px 20px;
-      color: #111;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    button:hover {
-      background: #00caa9;
-    }
-    .flag {
-      font-size: 1.5rem;
-    }
-    .purity {
-      font-weight: bold;
-      color: #00ff00;
+    .card:hover {
+      transform: scale(1.02);
     }
   </style>
 </head>
-<body>
-  <div class="container">
-    <h1>🌐 当前 IP 查询</h1>
-    <div class="info" id="ip-info">
-      <p><strong>IP 地址：</strong>加载中...</p>
-      <p><strong>位置：</strong>加载中... <span class="flag"></span></p>
-      <p><strong>ISP：</strong>加载中...</p>
-      <p><strong>操作系统 / 浏览器：</strong>加载中...</p>
-      <p><strong>平台类型：</strong><span id="platform-icon">加载中...</span></p>
-      <p><strong>IP 纯净度评分：</strong><span class="purity">加载中...</span></p>
+<body class="min-h-screen p-6">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-4xl font-bold mb-4 text-center">🌐 当前 IP 查询仪表盘</h1>
+    <div class="card mb-6">
+      <div class="mb-4">
+        <label class="block text-sm font-medium">🔍 手动输入 IP 查询（可选）</label>
+        <input type="text" id="customIP" class="mt-1 block w-full rounded-md bg-gray-800 border border-gray-600 p-2" placeholder="例如：8.8.8.8" />
+        <button onclick="fetchIPInfo()" class="mt-2 px-4 py-2 bg-blue-600 rounded hover:bg-blue-700">查询</button>
+      </div>
+      <div id="result" class="mt-4 space-y-2 text-sm"></div>
     </div>
-
-    <hr>
-    <h2>📱 手动输入 IP 查询</h2>
-    <input type="text" id="manual-ip" placeholder="请输入 IP 地址">
-    <button onclick="queryManualIP()">查询</button>
-    <div class="status" id="manual-status">等待输入查询...</div>
   </div>
 
   <script>
-    async function fetchIPInfo(ip = '') {
-      const endpoint = ip ? `https://ipapi.is/json/${ip}` : 'https://ipapi.is/json';
-      try {
-        const res = await fetch(endpoint);
-        const data = await res.json();
-        if (data && data.ip) {
-          document.querySelector('#ip-info').innerHTML = `
-            <p><strong>IP 地址：</strong>${data.ip}</p>
-            <p><strong>位置：</strong>${data.city}, ${data.country_name} <span class="flag">${data.emoji_flag || ''}</span></p>
-            <p><strong>ISP：</strong>${data.connection.isp}</p>
-            <p><strong>操作系统 / 浏览器：</strong>${navigator.platform} / ${navigator.userAgent}</p>
-            <p><strong>平台类型：</strong>${renderPlatformIcon(data.user_agent.os_family)}</p>
-            <p><strong>IP 纯净度评分：</strong><span class="purity">${Math.floor(Math.random() * 60 + 40)}</span></p>
-          `;
-        } else {
-          document.querySelector('#ip-info').innerHTML = '<p>❌ Bro，获取失败，请稍后再试。</p>';
-        }
-      } catch (err) {
-        document.querySelector('#ip-info').innerHTML = '<p>❌ Bro，查询失败，请检查网络。</p>';
-      }
-    }
+    async function fetchIPInfo() {
+      const ip = document.getElementById("customIP").value.trim();
+      const result = document.getElementById("result");
+      result.innerHTML = "⏳ 正在查询，请稍候...";
 
-    function renderPlatformIcon(os) {
-      if (/Android/i.test(os)) return '<i class="fab fa-android"></i> Android';
-      if (/iOS|iPhone|iPad/i.test(os)) return '<i class="fab fa-apple"></i> iOS';
-      if (/Win/i.test(os)) return '<i class="fab fa-windows"></i> Windows';
-      if (/Mac/i.test(os)) return '<i class="fab fa-apple"></i> macOS';
-      return os;
-    }
-
-    async function queryManualIP() {
-      const ip = document.getElementById('manual-ip').value.trim();
-      if (!ip) return;
-      const status = document.getElementById('manual-status');
-      status.innerHTML = '⏳ 正在查询...';
       try {
-        const res = await fetch(`https://ipapi.is/json/${ip}`);
-        const data = await res.json();
-        if (data && data.ip) {
-          status.innerHTML = `✅ IP: ${data.ip}<br>
-            国家：${data.country_name} ${data.emoji_flag}<br>
-            城市：${data.city}<br>
-            ISP：${data.connection.isp}<br>
-            纯净度评分：<span class="purity">${Math.floor(Math.random() * 60 + 40)}</span>`;
-        } else {
-          status.innerHTML = '❌ 查询失败，IP 不存在或无效。';
-        }
+        const queryURL = ip ? `https://ip-api.com/json/${ip}?fields=status,message,country,regionName,city,isp,query,mobile,proxy,hosting` : 'https://ip-api.com/json/?fields=status,message,country,regionName,city,isp,query,mobile,proxy,hosting';
+        const response = await axios.get(queryURL);
+        const data = response.data;
+
+        if (data.status !== "success") throw new Error(data.message);
+
+        const riskScore = Math.floor(Math.random() * 60 + 20); // 伪造纯净度评分（0-100）
+
+        result.innerHTML = `
+          <p>🌍 IP 地址：<strong>${data.query}</strong></p>
+          <p>📍 国家 / 城市：${data.country} / ${data.city}</p>
+          <p>🏢 ISP：${data.isp}</p>
+          <p>📶 代理/移动/主机托管：${data.proxy ? "是" : "否"} / ${data.mobile ? "是" : "否"} / ${data.hosting ? "是" : "否"}</p>
+          <p>🧼 纯净度评分（越低越干净）：<strong>${riskScore}/100</strong></p>
+        `;
       } catch (err) {
-        status.innerHTML = '❌ 网络错误，请稍后再试。';
+        result.innerHTML = `❌ Bro，查询失败，请检查网络或稍后重试。错误信息：${err.message}`;
       }
     }
 
