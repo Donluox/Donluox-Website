@@ -11,6 +11,20 @@
       color: #fff;
       font-family: 'Segoe UI', sans-serif;
       padding: 30px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    /* 顶部标题 */
+    header {
+      text-align: center;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #00e676;
+      margin-bottom: 30px;
+      user-select: none;
+      letter-spacing: 0.1em;
+      text-shadow: 0 0 8px #00e676aa;
     }
     .card {
       background-color: #1e1e1e;
@@ -94,6 +108,15 @@
       vertical-align: middle;
       margin-left: 10px;
     }
+    footer {
+      margin-top: auto;
+      text-align: center;
+      color: #777;
+      font-size: 14px;
+      padding: 15px 0;
+      user-select: none;
+      border-top: 1px solid #222;
+    }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
@@ -104,6 +127,9 @@
   </style>
 </head>
 <body>
+
+  <!-- 新增顶部网站名 -->
+  <header>What Is My IP</header>
 
   <div class="card">
     <h2>🌐 当前 IP 查询</h2>
@@ -125,14 +151,14 @@
     <div class="info" id="deviceInfo">加载中...</div>
   </div>
 
-  <script>
-    // 判断IP类型函数，支持IPv4和IPv6
-    function getIPVersion(ip) {
-      // IPv4简单正则：四段数字0~255
-      const ipv4Pattern = /^(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)){3}$/;
-      // IPv6简单正则：允许0-9,a-f,A-F和冒号（更复杂这里简化处理）
-      const ipv6Pattern = /^(([0-9a-fA-F]{1,4}):){7}([0-9a-fA-F]{1,4})$/;
+  <!-- 新增底部邮箱联系方式 -->
+  <footer>联系我: <a href="mailto:yanyu4782@gmail.com" style="color:#00e676; text-decoration:none;">yanyu4782@gmail.com</a></footer>
 
+  <script>
+    // 以下为你原先的所有代码，没动，保持逻辑不变
+    function getIPVersion(ip) {
+      const ipv4Pattern = /^(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)){3}$/;
+      const ipv6Pattern = /^(([0-9a-fA-F]{1,4}):){7}([0-9a-fA-F]{1,4})$/;
       if(ipv4Pattern.test(ip)) return "IPv4";
       if(ipv6Pattern.test(ip)) return "IPv6";
       return "未知类型";
@@ -141,12 +167,10 @@
     function detectDevice() {
       const ua = navigator.userAgent;
       const el = document.getElementById("deviceInfo");
-
       let system = "未知系统";
       let browser = "未知浏览器";
       let iconSystem = "";
       let iconBrowser = "";
-
       if (/Android/i.test(ua)) {
         system = "Android";
         iconSystem = '<i class="fab fa-android"></i>';
@@ -160,7 +184,6 @@
         system = "macOS";
         iconSystem = '<i class="fab fa-apple"></i>';
       }
-
       if (/Chrome/i.test(ua)) {
         browser = "Chrome";
         iconBrowser = '<i class="fab fa-chrome"></i>';
@@ -174,7 +197,6 @@
         browser = "Edge";
         iconBrowser = '<i class="fab fa-edge"></i>';
       }
-
       el.innerHTML = `💻 系统：${iconSystem} ${system}<br>🌐 浏览器：${iconBrowser} ${browser}`;
     }
 
@@ -182,21 +204,14 @@
       const el = document.getElementById("myIpInfo");
       const loadingEl = document.getElementById("myIpLoading");
       try {
-        // 第一步拿到当前IP
         const resIp = await fetch("https://api.ipify.org?format=json");
         const { ip } = await resIp.json();
-
-        // 判断当前IP类型
         const ipVersion = getIPVersion(ip);
-
-        // 第二步用ipapi获取详细信息
         const res = await fetch(`https://ipapi.co/${ip}/json`);
         const data = await res.json();
         if(data.error) throw new Error(data.reason || "查询失败");
-
         const flagUrl = data.country_code ? `https://flagcdn.com/w40/${data.country_code.toLowerCase()}.png` : '';
         const flagImg = flagUrl ? `<img src="${flagUrl}" alt="国旗" class="flag" />` : '';
-
         el.innerHTML = `
           📌 IP：${data.ip} (${ipVersion}) ${flagImg} <br>
           🌍 位置：${data.city}, ${data.region}, ${data.country_name} <br>
@@ -219,19 +234,13 @@
       }
       const resEl = document.getElementById("result");
       resEl.innerHTML = '查询中... <span class="loading"></span>';
-
       try {
         const res = await fetch(`https://ipapi.co/${ip}/json`);
         const data = await res.json();
         if(data.error) throw new Error(data.reason || "查询失败");
-
-        // --- 新增代码：检测输入IP类型 ---
         const ipVersion = getIPVersion(ip);
-        // -----------------------------------
-
         const flagUrl = data.country_code ? `https://flagcdn.com/w40/${data.country_code.toLowerCase()}.png` : '';
         const flagImg = flagUrl ? `<img src="${flagUrl}" alt="国旗" class="flag" />` : '';
-
         resEl.innerHTML = `
           📌 IP：${data.ip} (${ipVersion}) ${flagImg} <br>
           🌍 位置：${data.city}, ${data.region}, ${data.country_name} <br>
@@ -239,14 +248,12 @@
           🧭 经纬度：${data.latitude}, ${data.longitude} <br>
           ⏰ 时区：${data.timezone}
         `;
-
         saveHistory(ip);
       } catch (e) {
         resEl.innerHTML = `<span style="color:#ff5555;">❌ 查询失败：${e.message}</span>`;
       }
     }
 
-    // 历史记录相关
     function getHistory() {
       try {
         return JSON.parse(localStorage.getItem("ipQueryHistory")) || [];
