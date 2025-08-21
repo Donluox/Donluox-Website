@@ -1,44 +1,105 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>What Is My IP</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IP 信息查询</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 <style>
-body { background-color: #111; color: #fff; font-family: 'Segoe UI', sans-serif; padding: 30px; display: flex; flex-direction: column; min-height: 100vh; }
-header { text-align: center; font-size: 2.5rem; font-weight: 700; color: #00e676; margin-bottom: 30px; user-select: none; letter-spacing: 0.1em; text-shadow: 0 0 8px #00e676aa; }
-.card { background-color: #1e1e1e; border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 0 10px rgba(255, 255, 255, 0.05); transition: all 0.4s ease-in-out; animation: fadeIn 0.6s ease; }
-.card:hover { transform: scale(1.01); box-shadow: 0 0 15px rgba(255, 255, 255, 0.1); }
+body {
+  background: #0d1117;
+  color: #fff;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 30px;
+}
+header {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #00e676;
+  font-weight: 700;
+  margin-bottom: 30px;
+  text-shadow: 0 0 8px #00e676aa;
+}
+.card {
+  background-color: #1e1e1e;
+  border-radius: 15px;
+  padding: 25px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 20px rgba(0,230,118,0.5);
+}
+.card h2 {
+  margin-bottom: 15px;
+  color: #00e676;
+}
 .input-group { margin-bottom: 20px; }
-input { width: 100%; padding: 10px 15px; font-size: 16px; border-radius: 8px; border: none; outline: none; background-color: #222; color: #eee; }
-button { margin-top: 10px; padding: 10px 20px; font-size: 16px; background-color: #00c853; border: none; border-radius: 8px; cursor: pointer; color: #fff; transition: background 0.3s ease; }
+input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  background-color: #222;
+  color: #eee;
+  font-size: 16px;
+}
+button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #00c853;
+  color: #fff;
+  font-size: 16px;
+  transition: background 0.3s ease;
+}
 button:hover { background-color: #00e676; }
-.info span { display: block; margin-top: 10px; font-size: 16px; }
-.flag { width: 24px; height: 16px; vertical-align: middle; margin-left: 6px; border-radius: 2px; box-shadow: 0 0 3px rgba(0,0,0,0.3); }
+.info { font-size: 16px; line-height: 1.6; }
+.flag { width: 28px; height: 18px; vertical-align: middle; margin-left: 6px; border-radius: 2px; box-shadow: 0 0 3px rgba(0,0,0,0.3); }
 .history-list { margin-top: 10px; font-size: 14px; color: #aaa; }
-.history-list span { cursor: pointer; color: #00e676; margin-right: 12px; user-select: none; }
-.history-list span:hover { text-decoration: underline; }
-.loading { display: inline-block; width: 20px; height: 20px; border: 3px solid #00e676; border-radius: 50%; border-top-color: transparent; animation: spin 1s linear infinite; vertical-align: middle; margin-left: 10px; }
-footer { margin-top: auto; text-align: center; color: #777; font-size: 14px; padding: 15px 0; user-select: none; border-top: 1px solid #222; }
-.residential { color: #00e676; font-weight: bold; }
-.datacenter { color: #ff3d00; font-weight: bold; }
-.device-icon, .browser-icon { margin-right: 6px; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.history-list span {
+  cursor: pointer;
+  margin-right: 12px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: 0.2s;
+}
+.history-list span:hover { background-color: #222; color: #00e676; }
+.loading {
+  display: inline-block;
+  width: 20px; height: 20px;
+  border: 3px solid #00e676;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 1s linear infinite;
+  vertical-align: middle;
+  margin-left: 10px;
+}
+footer { text-align: center; margin-top: auto; color: #777; font-size: 14px; padding: 15px 0; border-top:1px solid #222; }
+.residential { color:#00e676; font-weight:bold; text-shadow:0 0 6px #00e676aa; }
+.datacenter { color:#ff3d00; font-weight:bold; text-shadow:0 0 6px #ff3d00aa; }
+.device-icon, .browser-icon { margin-right:6px; }
 @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
 
-<header>What Is My IP</header>
+<header>IP 信息查询</header>
 
 <div class="card">
-  <h2>🌐 当前 IP 查询</h2>
+  <h2>🌐 当前 IP</h2>
   <div class="info" id="myIpInfo">查询中... <span class="loading" id="myIpLoading"></span></div>
 </div>
 
 <div class="card">
-  <h2>🔍 手动查询其他 IP</h2>
+  <h2>🔍 查询其他 IP</h2>
   <div class="input-group">
     <input type="text" id="ipInput" placeholder="输入 IP 地址">
     <button onclick="queryIP()">查询</button>
@@ -48,7 +109,7 @@ footer { margin-top: auto; text-align: center; color: #777; font-size: 14px; pad
 </div>
 
 <div class="card">
-  <h2>🖥️ 用户设备 / 浏览器</h2>
+  <h2>🖥️ 设备 / 浏览器信息</h2>
   <div class="info" id="deviceInfo">加载中...</div>
 </div>
 
@@ -58,70 +119,68 @@ footer { margin-top: auto; text-align: center; color: #777; font-size: 14px; pad
 function detectDevice() {
   const ua = navigator.userAgent;
   const el = document.getElementById("deviceInfo");
-  let system = "未知系统", browser = "未知浏览器";
-  let systemIcon = "", browserIcon = "";
-  if (/Android/i.test(ua)) { system="Android"; systemIcon='<i class="fab fa-android device-icon"></i>'; }
-  else if (/iPhone|iPad/i.test(ua)) { system="iOS"; systemIcon='<i class="fab fa-apple device-icon"></i>'; }
-  else if (/Windows/i.test(ua)) { system="Windows"; systemIcon='<i class="fab fa-windows device-icon"></i>'; }
-  else if (/Macintosh/i.test(ua)) { system="macOS"; systemIcon='<i class="fab fa-apple device-icon"></i>'; }
+  let system="未知系统", browser="未知浏览器", sysIcon="", brIcon="";
+  if(/Android/i.test(ua)){ system="Android"; sysIcon='<i class="fab fa-android device-icon"></i>'; }
+  else if(/iPhone|iPad/i.test(ua)){ system="iOS"; sysIcon='<i class="fab fa-apple device-icon"></i>'; }
+  else if(/Windows/i.test(ua)){ system="Windows"; sysIcon='<i class="fab fa-windows device-icon"></i>'; }
+  else if(/Macintosh/i.test(ua)){ system="macOS"; sysIcon='<i class="fab fa-apple device-icon"></i>'; }
 
-  if (/Chrome/i.test(ua)) { browser="Chrome"; browserIcon='<i class="fab fa-chrome browser-icon"></i>'; }
-  else if (/Firefox/i.test(ua)) { browser="Firefox"; browserIcon='<i class="fab fa-firefox browser-icon"></i>'; }
-  else if (/Safari/i.test(ua) && !/Chrome/i.test(ua)) { browser="Safari"; browserIcon='<i class="fab fa-safari browser-icon"></i>'; }
-  else if (/Edg/i.test(ua)) { browser="Edge"; browserIcon='<i class="fab fa-edge browser-icon"></i>'; }
+  if(/Chrome/i.test(ua)){ browser="Chrome"; brIcon='<i class="fab fa-chrome browser-icon"></i>'; }
+  else if(/Firefox/i.test(ua)){ browser="Firefox"; brIcon='<i class="fab fa-firefox browser-icon"></i>'; }
+  else if(/Safari/i.test(ua) && !/Chrome/i.test(ua)){ browser="Safari"; brIcon='<i class="fab fa-safari browser-icon"></i>'; }
+  else if(/Edg/i.test(ua)){ browser="Edge"; brIcon='<i class="fab fa-edge browser-icon"></i>'; }
 
-  el.innerHTML = `${systemIcon}系统: ${system} <br> ${browserIcon}浏览器: ${browser}`;
+  el.innerHTML = `${sysIcon}${system} <br> ${brIcon}${browser}`;
 }
 detectDevice();
 
-let historyIPs = [];
-function addHistory(ip) {
-  if(!historyIPs.includes(ip)) historyIPs.push(ip);
-  const listEl = document.getElementById('historyList');
-  listEl.innerHTML = '';
-  historyIPs.slice(-10).reverse().forEach(item => {
-    const span = document.createElement('span');
-    span.textContent = item;
-    span.onclick = () => fetchIPInfo(item, document.getElementById('result'));
+let historyIPs=[];
+function addHistory(ip,typeClass){
+  if(!historyIPs.includes(ip)) historyIPs.push({ip,typeClass});
+  const listEl=document.getElementById('historyList');
+  listEl.innerHTML='';
+  historyIPs.slice(-10).reverse().forEach(item=>{
+    const span=document.createElement('span');
+    span.textContent=item.ip;
+    span.className=item.typeClass;
+    span.onclick=()=>fetchIPInfo(item.ip,document.getElementById('result'));
     listEl.appendChild(span);
   });
 }
 
-async function fetchIPInfo(ip, el) {
-  el.innerHTML = '查询中... <span class="loading"></span>';
-  try {
-    const url = ip ? `https://ipapi.co/${ip}/json/` : 'https://ipapi.co/json/';
+async function fetchIPInfo(ip,el){
+  el.innerHTML='查询中... <span class="loading"></span>';
+  try{
+    const url = ip?`https://ipapi.co/${ip}/json/`:'https://ipapi.co/json/';
     const res = await fetch(url);
     const data = await res.json();
 
-    let isp = data.org || '未知';
-    let ipType = '住宅 IP', cssClass='residential';
-    const cloudKeywords = ['Amazon','AWS','Alibaba','Tencent','DigitalOcean','OVH','Google','Linode','Hetzner','Vultr'];
+    let isp=data.org||'未知';
+    let ipType='住宅 IP', cssClass='residential';
+    const cloudKeywords=['Amazon','AWS','Alibaba','Tencent','DigitalOcean','OVH','Google','Linode','Hetzner','Vultr'];
     for(let kw of cloudKeywords){ if(isp.includes(kw)){ ipType='机房 IP'; cssClass='datacenter'; break; } }
 
-    // 国家旗帜
-    let countryFlag = data.country_code ? `<img class="flag" src="https://flagcdn.com/24x18/${data.country_code.toLowerCase()}.png" alt="${data.country_name}">` : '';
+    let countryFlag=data.country_code?`<img class="flag" src="https://flagcdn.com/24x18/${data.country_code.toLowerCase()}.png" alt="${data.country_name}">`:'';
 
-    el.innerHTML = `
-      IP: ${data.ip} <br>
-      国家: ${data.country_name || '未知'} ${countryFlag} <br>
-      城市: ${data.city || '未知'} <br>
-      ISP/组织: ${isp} <br>
-      ASN: ${data.asn || '未知'} <br>
-      类型: <span class="${cssClass}">${ipType}</span>
+    el.innerHTML=`
+      <strong>IP:</strong> ${data.ip} <br>
+      <strong>国家:</strong> ${data.country_name||'未知'} ${countryFlag} <br>
+      <strong>城市:</strong> ${data.city||'未知'} <br>
+      <strong>ISP/组织:</strong> ${isp} <br>
+      <strong>ASN:</strong> ${data.asn||'未知'} <br>
+      <strong>类型:</strong> <span class="${cssClass}">${ipType}</span>
     `;
-    if(ip) addHistory(ip);
-  } catch(err) { el.innerHTML = '查询失败: '+err.message; }
+    if(ip) addHistory(ip,cssClass);
+  }catch(err){ el.innerHTML='查询失败: '+err.message; }
 }
 
-function queryIP() {
-  const ip = document.getElementById('ipInput').value.trim();
+function queryIP(){
+  const ip=document.getElementById('ipInput').value.trim();
   if(!ip) return alert('请输入 IP 地址');
-  fetchIPInfo(ip, document.getElementById('result'));
+  fetchIPInfo(ip,document.getElementById('result'));
 }
 
-// 默认查询当前 IP
-fetchIPInfo(null, document.getElementById('myIpInfo'));
+fetchIPInfo(null,document.getElementById('myIpInfo'));
 </script>
 </body>
 </html>
