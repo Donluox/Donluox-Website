@@ -1,131 +1,32 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>What Is My IP</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <style>
-    body {
-      background-color: #111;
-      color: #fff;
-      font-family: 'Segoe UI', sans-serif;
-      padding: 30px;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-    header {
-      text-align: center;
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: #00e676;
-      margin-bottom: 30px;
-      user-select: none;
-      letter-spacing: 0.1em;
-      text-shadow: 0 0 8px #00e676aa;
-    }
-    .card {
-      background-color: #1e1e1e;
-      border-radius: 12px;
-      padding: 25px;
-      margin-bottom: 20px;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
-      transition: all 0.4s ease-in-out;
-      animation: fadeIn 0.6s ease;
-    }
-    .card:hover {
-      transform: scale(1.01);
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
-    }
-    .input-group {
-      margin-bottom: 20px;
-    }
-    input {
-      width: 100%;
-      padding: 10px 15px;
-      font-size: 16px;
-      border-radius: 8px;
-      border: none;
-      outline: none;
-      background-color: #222;
-      color: #eee;
-    }
-    button {
-      margin-top: 10px;
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #00c853;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      color: #fff;
-      transition: background 0.3s ease;
-    }
-    button:hover {
-      background-color: #00e676;
-    }
-    .info span {
-      display: block;
-      margin-top: 10px;
-      font-size: 16px;
-    }
-    .icon {
-      font-size: 18px;
-      margin-right: 6px;
-    }
-    .flag {
-      width: 24px;
-      height: 16px;
-      vertical-align: middle;
-      margin-left: 6px;
-      border-radius: 2px;
-      box-shadow: 0 0 3px rgba(0,0,0,0.3);
-    }
-    .history-list {
-      margin-top: 10px;
-      font-size: 14px;
-      color: #aaa;
-    }
-    .history-list span {
-      cursor: pointer;
-      color: #00e676;
-      margin-right: 12px;
-      user-select: none;
-    }
-    .history-list span:hover {
-      text-decoration: underline;
-    }
-    .loading {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      border: 3px solid #00e676;
-      border-radius: 50%;
-      border-top-color: transparent;
-      animation: spin 1s linear infinite;
-      vertical-align: middle;
-      margin-left: 10px;
-    }
-    footer {
-      margin-top: auto;
-      text-align: center;
-      color: #777;
-      font-size: 14px;
-      padding: 15px 0;
-      user-select: none;
-      border-top: 1px solid #222;
-    }
-    .residential { color: #00e676; font-weight: bold; }
-    .datacenter { color: #ff3d00; font-weight: bold; }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>What Is My IP</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<style>
+body { background-color: #111; color: #fff; font-family: 'Segoe UI', sans-serif; padding: 30px; display: flex; flex-direction: column; min-height: 100vh; }
+header { text-align: center; font-size: 2.5rem; font-weight: 700; color: #00e676; margin-bottom: 30px; user-select: none; letter-spacing: 0.1em; text-shadow: 0 0 8px #00e676aa; }
+.card { background-color: #1e1e1e; border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 0 10px rgba(255, 255, 255, 0.05); transition: all 0.4s ease-in-out; animation: fadeIn 0.6s ease; }
+.card:hover { transform: scale(1.01); box-shadow: 0 0 15px rgba(255, 255, 255, 0.1); }
+.input-group { margin-bottom: 20px; }
+input { width: 100%; padding: 10px 15px; font-size: 16px; border-radius: 8px; border: none; outline: none; background-color: #222; color: #eee; }
+button { margin-top: 10px; padding: 10px 20px; font-size: 16px; background-color: #00c853; border: none; border-radius: 8px; cursor: pointer; color: #fff; transition: background 0.3s ease; }
+button:hover { background-color: #00e676; }
+.info span { display: block; margin-top: 10px; font-size: 16px; }
+.flag { width: 24px; height: 16px; vertical-align: middle; margin-left: 6px; border-radius: 2px; box-shadow: 0 0 3px rgba(0,0,0,0.3); }
+.history-list { margin-top: 10px; font-size: 14px; color: #aaa; }
+.history-list span { cursor: pointer; color: #00e676; margin-right: 12px; user-select: none; }
+.history-list span:hover { text-decoration: underline; }
+.loading { display: inline-block; width: 20px; height: 20px; border: 3px solid #00e676; border-radius: 50%; border-top-color: transparent; animation: spin 1s linear infinite; vertical-align: middle; margin-left: 10px; }
+footer { margin-top: auto; text-align: center; color: #777; font-size: 14px; padding: 15px 0; user-select: none; border-top: 1px solid #222; }
+.residential { color: #00e676; font-weight: bold; }
+.datacenter { color: #ff3d00; font-weight: bold; }
+.device-icon, .browser-icon { margin-right: 6px; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
 </head>
 <body>
 
@@ -154,79 +55,73 @@
 <footer>联系我: <a href="mailto:abc@donluox.dpdns.org" style="color:#00e676; text-decoration:none;">abc@donluox.dpdns.org</a></footer>
 
 <script>
-  function detectDevice() {
-    const ua = navigator.userAgent;
-    const el = document.getElementById("deviceInfo");
-    let system = "未知系统", browser = "未知浏览器";
-    if (/Android/i.test(ua)) system = "Android";
-    else if (/iPhone|iPad/i.test(ua)) system = "iOS";
-    else if (/Windows/i.test(ua)) system = "Windows";
-    else if (/Macintosh/i.test(ua)) system = "macOS";
+function detectDevice() {
+  const ua = navigator.userAgent;
+  const el = document.getElementById("deviceInfo");
+  let system = "未知系统", browser = "未知浏览器";
+  let systemIcon = "", browserIcon = "";
+  if (/Android/i.test(ua)) { system="Android"; systemIcon='<i class="fab fa-android device-icon"></i>'; }
+  else if (/iPhone|iPad/i.test(ua)) { system="iOS"; systemIcon='<i class="fab fa-apple device-icon"></i>'; }
+  else if (/Windows/i.test(ua)) { system="Windows"; systemIcon='<i class="fab fa-windows device-icon"></i>'; }
+  else if (/Macintosh/i.test(ua)) { system="macOS"; systemIcon='<i class="fab fa-apple device-icon"></i>'; }
 
-    if (/Chrome/i.test(ua)) browser = "Chrome";
-    else if (/Firefox/i.test(ua)) browser = "Firefox";
-    else if (/Safari/i.test(ua) && !/Chrome/i.test(ua)) browser = "Safari";
-    else if (/Edg/i.test(ua)) browser = "Edge";
+  if (/Chrome/i.test(ua)) { browser="Chrome"; browserIcon='<i class="fab fa-chrome browser-icon"></i>'; }
+  else if (/Firefox/i.test(ua)) { browser="Firefox"; browserIcon='<i class="fab fa-firefox browser-icon"></i>'; }
+  else if (/Safari/i.test(ua) && !/Chrome/i.test(ua)) { browser="Safari"; browserIcon='<i class="fab fa-safari browser-icon"></i>'; }
+  else if (/Edg/i.test(ua)) { browser="Edge"; browserIcon='<i class="fab fa-edge browser-icon"></i>'; }
 
-    el.innerHTML = `系统: ${system} <br> 浏览器: ${browser}`;
-  }
-  detectDevice();
+  el.innerHTML = `${systemIcon}系统: ${system} <br> ${browserIcon}浏览器: ${browser}`;
+}
+detectDevice();
 
-  let historyIPs = [];
+let historyIPs = [];
+function addHistory(ip) {
+  if(!historyIPs.includes(ip)) historyIPs.push(ip);
+  const listEl = document.getElementById('historyList');
+  listEl.innerHTML = '';
+  historyIPs.slice(-10).reverse().forEach(item => {
+    const span = document.createElement('span');
+    span.textContent = item;
+    span.onclick = () => fetchIPInfo(item, document.getElementById('result'));
+    listEl.appendChild(span);
+  });
+}
 
-  function addHistory(ip) {
-    if(!historyIPs.includes(ip)) historyIPs.push(ip);
-    const listEl = document.getElementById('historyList');
-    listEl.innerHTML = '';
-    historyIPs.slice(-10).reverse().forEach(item => {
-      const span = document.createElement('span');
-      span.textContent = item;
-      span.onclick = () => fetchIPInfo(item, document.getElementById('result'));
-      listEl.appendChild(span);
-    });
-  }
+async function fetchIPInfo(ip, el) {
+  el.innerHTML = '查询中... <span class="loading"></span>';
+  try {
+    const url = ip ? `https://ipapi.co/${ip}/json/` : 'https://ipapi.co/json/';
+    const res = await fetch(url);
+    const data = await res.json();
 
-  async function fetchIPInfo(ip, el) {
-    el.innerHTML = '查询中... <span class="loading"></span>';
-    try {
-      const url = ip ? `https://ipapi.co/${ip}/json/` : 'https://ipapi.co/json/';
-      const res = await fetch(url);
-      const data = await res.json();
+    let isp = data.org || '未知';
+    let ipType = '住宅 IP', cssClass='residential';
+    const cloudKeywords = ['Amazon','AWS','Alibaba','Tencent','DigitalOcean','OVH','Google','Linode','Hetzner','Vultr'];
+    for(let kw of cloudKeywords){ if(isp.includes(kw)){ ipType='机房 IP'; cssClass='datacenter'; break; } }
 
-      let isp = data.org || '未知';
-      let ipType = '住宅 IP';
-      let cssClass = 'residential';
-      const cloudKeywords = ['Amazon','AWS','Alibaba','Tencent','DigitalOcean','OVH','Google','Linode','Hetzner','Vultr'];
-      for(let kw of cloudKeywords){
-        if(isp.includes(kw)){
-          ipType = '机房 IP';
-          cssClass = 'datacenter';
-          break;
-        }
-      }
+    // 国家旗帜
+    let countryFlag = data.country_code ? `<img class="flag" src="https://flagcdn.com/24x18/${data.country_code.toLowerCase()}.png" alt="${data.country_name}">` : '';
 
-      el.innerHTML = `IP: ${data.ip} <br>
-        国家: ${data.country_name || '未知'} <br>
-        城市: ${data.city || '未知'} <br>
-        ISP/组织: ${isp} <br>
-        ASN: ${data.asn || '未知'} <br>
-        类型: <span class="${cssClass}">${ipType}</span>`;
+    el.innerHTML = `
+      IP: ${data.ip} <br>
+      国家: ${data.country_name || '未知'} ${countryFlag} <br>
+      城市: ${data.city || '未知'} <br>
+      ISP/组织: ${isp} <br>
+      ASN: ${data.asn || '未知'} <br>
+      类型: <span class="${cssClass}">${ipType}</span>
+    `;
+    if(ip) addHistory(ip);
+  } catch(err) { el.innerHTML = '查询失败: '+err.message; }
+}
 
-      if(ip) addHistory(ip);
+function queryIP() {
+  const ip = document.getElementById('ipInput').value.trim();
+  if(!ip) return alert('请输入 IP 地址');
+  fetchIPInfo(ip, document.getElementById('result'));
+}
 
-    } catch(err) {
-      el.innerHTML = '查询失败: ' + err.message;
-    }
-  }
-
-  function queryIP() {
-    const ip = document.getElementById('ipInput').value.trim();
-    if(!ip) return alert('请输入 IP 地址');
-    fetchIPInfo(ip, document.getElementById('result'));
-  }
-
-  // 默认查询当前 IP
-  fetchIPInfo(null, document.getElementById('myIpInfo'));
+// 默认查询当前 IP
+fetchIPInfo(null, document.getElementById('myIpInfo'));
 </script>
 </body>
 </html>
