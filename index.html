@@ -1,36 +1,93 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-  <!--
-    What Is My IP - 稳定、可读、带纯净度与机房识别的版本
-  -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>What Is My IP</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-    body { background-color: #111; color: #fff; font-family: 'Segoe UI', sans-serif; padding: 30px; display: flex; flex-direction: column; min-height: 100vh; }
-    header { text-align: center; font-size: 2.5rem; font-weight: 700; color: #00e676; margin-bottom: 30px; user-select: none; letter-spacing: 0.1em; text-shadow: 0 0 8px #00e676aa; }
-    .card { background-color: #1e1e1e; border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 0 10px rgba(255, 255, 255, 0.05); transition: all 0.4s ease-in-out; animation: fadeIn 0.6s ease; }
-    .card:hover { transform: scale(1.01); box-shadow: 0 0 15px rgba(255, 255, 255, 0.1); }
+    body {
+      background-color: #111;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    header {
+      text-align: center;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #00e676;
+      margin-bottom: 30px;
+      user-select: none;
+      letter-spacing: 0.1em;
+      text-shadow: 0 0 8px #00e676aa;
+    }
+    .card {
+      background-color: #1e1e1e;
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+      transition: all 0.4s ease-in-out;
+      animation: fadeIn 0.6s ease;
+    }
+    .card:hover {
+      transform: scale(1.01);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    }
     .input-group { margin-bottom: 20px; }
-    input[type="text"] { width: 100%; padding: 10px 15px; font-size: 16px; border-radius: 8px; border: none; outline: none; background-color: #222; color: #eee; }
-    button { margin-top: 10px; padding: 10px 20px; font-size: 16px; background-color: #00c853; border: none; border-radius: 8px; cursor: pointer; color: #fff; transition: background 0.3s ease; }
+    input {
+      width: 100%;
+      padding: 10px 15px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      background-color: #222;
+      color: #eee;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #00c853;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: #fff;
+      transition: background 0.3s ease;
+    }
     button:hover { background-color: #00e676; }
     .info span { display: block; margin-top: 10px; font-size: 16px; }
     .icon { font-size: 18px; margin-right: 6px; }
-    .flag { width: 24px; height: 16px; vertical-align: middle; margin-left: 6px; border-radius: 2px; box-shadow: 0 0 3px rgba(0,0,0,0.3); }
+    .flag {
+      width: 24px; height: 16px; vertical-align: middle;
+      margin-left: 6px; border-radius: 2px;
+      box-shadow: 0 0 3px rgba(0,0,0,0.3);
+    }
     .history-list { margin-top: 10px; font-size: 14px; color: #aaa; }
-    .history-list span { cursor: pointer; color: #00e676; margin-right: 12px; user-select: none; }
+    .history-list span {
+      cursor: pointer; color: #00e676;
+      margin-right: 12px; user-select: none;
+    }
     .history-list span:hover { text-decoration: underline; }
-    .loading { display: inline-block; width: 20px; height: 20px; border: 3px solid #00e676; border-radius: 50%; border-top-color: transparent; animation: spin 1s linear infinite; vertical-align: middle; margin-left: 10px; }
-    .purity-bar { width: 100%; height: 14px; border-radius: 8px; background: #2a2a2a; overflow: hidden; margin-top: 8px; border: 1px solid #333; }
-    .purity-fill { height: 100%; width: 0%; transition: width 0.5s ease; background: #00e676; }
-    .purity-green { color: #00e676; font-weight: 600; }
-    .purity-yellow { color: #ffeb3b; font-weight: 600; }
-    .purity-red { color: #ff5252; font-weight: 600; }
-    footer { margin-top: auto; text-align: center; color: #777; font-size: 14px; padding: 15px 0; user-select: none; border-top: 1px solid #222; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px);} to { opacity: 1; transform: translateY(0);} }
+    .loading {
+      display: inline-block;
+      width: 20px; height: 20px;
+      border: 3px solid #00e676;
+      border-radius: 50%; border-top-color: transparent;
+      animation: spin 1s linear infinite;
+      vertical-align: middle; margin-left: 10px;
+    }
+    footer {
+      margin-top: auto; text-align: center;
+      color: #777; font-size: 14px; padding: 15px 0;
+      user-select: none; border-top: 1px solid #222;
+    }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
     @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
@@ -38,20 +95,18 @@
 
   <header>What Is My IP</header>
 
-  <div class="card" aria-live="polite" aria-busy="true">
+  <div class="card">
     <h2>🌐 当前 IP 查询</h2>
     <div class="info" id="myIpInfo">查询中... <span class="loading" id="myIpLoading"></span></div>
-    <div class="info" id="myIpPurity"></div>
   </div>
 
-  <div class="card" aria-live="polite">
+  <div class="card">
     <h2>🔍 手动查询其他 IP</h2>
     <div class="input-group">
-      <input type="text" id="ipInput" placeholder="输入 IP 地址" aria-label="输入要查询的 IP 地址" autocomplete="off" />
-      <button id="queryBtn" type="button" aria-label="开始查询" onclick="queryIP()">查询</button>
+      <input type="text" id="ipInput" placeholder="输入 IP 地址">
+      <button onclick="queryIP()">查询</button>
     </div>
     <div class="info" id="result"></div>
-    <div class="info" id="resultPurity"></div>
     <div class="history-list" id="historyList"></div>
   </div>
 
@@ -60,19 +115,17 @@
     <div class="info" id="deviceInfo">加载中...</div>
   </div>
 
-  <footer>
-    联系我: <a href="mailto:abc@donluox.dpdns.org" style="color:#00e676; text-decoration:none;">abc@donluox.dpdns.org</a>
-  </footer>
+  <footer>联系我: <a href="mailto:yanyu4782@gmail.com" style="color:#00e676; text-decoration:none;">yanyu4782@gmail.com</a></footer>
 
   <script>
-    // 保留原先完整逻辑
-    const ABUSE_API_KEY = "你的AbuseIPDB_API_KEY"; // 请自行替换
+    // 🔑 AbuseIPDB API Key
+    const ABUSE_API_KEY = "7ff20287c065632f6351c61f84877fe819494b5c1342ee28bf26edf623d4bdf21ecaef989e58b416";
 
     function getIPVersion(ip) {
       const ipv4Pattern = /^(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)){3}$/;
       const ipv6Pattern = /^(([0-9a-fA-F]{1,4}):){7}([0-9a-fA-F]{1,4})$/;
-      if (ipv4Pattern.test(ip)) return "IPv4";
-      if (ipv6Pattern.test(ip)) return "IPv6";
+      if(ipv4Pattern.test(ip)) return "IPv4";
+      if(ipv6Pattern.test(ip)) return "IPv6";
       return "未知类型";
     }
 
@@ -80,69 +133,133 @@
       const ua = navigator.userAgent;
       const el = document.getElementById("deviceInfo");
       let system = "未知系统", browser = "未知浏览器", iconSystem = "", iconBrowser = "";
-      if (/Android/i.test(ua)) { system = "Android"; iconSystem = '<i class="fab fa-android"></i>'; }
-      else if (/iPhone|iPad/i.test(ua)) { system = "iOS"; iconSystem = '<i class="fab fa-apple"></i>'; }
-      else if (/Windows/i.test(ua)) { system = "Windows"; iconSystem = '<i class="fab fa-windows"></i>'; }
-      else if (/Macintosh/i.test(ua)) { system = "macOS"; iconSystem = '<i class="fab fa-apple"></i>'; }
-      if (/Chrome\//i.test(ua)) { browser = "Chrome"; iconBrowser = '<i class="fab fa-chrome"></i>'; }
-      else if (/Firefox\//i.test(ua)) { browser = "Firefox"; iconBrowser = '<i class="fab fa-firefox-browser"></i>'; }
-      else if (/Safari\//i.test(ua) && !/Chrome\//i.test(ua)) { browser = "Safari"; iconBrowser = '<i class="fab fa-safari"></i>'; }
-      else if (/Edg\//i.test(ua)) { browser = "Edge"; iconBrowser = '<i class="fab fa-edge"></i>'; }
+      if (/Android/i.test(ua)) { system="Android"; iconSystem='<i class="fab fa-android"></i>'; }
+      else if (/iPhone|iPad/i.test(ua)) { system="iOS"; iconSystem='<i class="fab fa-apple"></i>'; }
+      else if (/Windows/i.test(ua)) { system="Windows"; iconSystem='<i class="fab fa-windows"></i>'; }
+      else if (/Macintosh/i.test(ua)) { system="macOS"; iconSystem='<i class="fab fa-apple"></i>'; }
+      if (/Chrome/i.test(ua)) { browser="Chrome"; iconBrowser='<i class="fab fa-chrome"></i>'; }
+      else if (/Firefox/i.test(ua)) { browser="Firefox"; iconBrowser='<i class="fab fa-firefox-browser"></i>'; }
+      else if (/Safari/i.test(ua) && !/Chrome/i.test(ua)) { browser="Safari"; iconBrowser='<i class="fab fa-safari"></i>'; }
+      else if (/Edg/i.test(ua)) { browser="Edge"; iconBrowser='<i class="fab fa-edge"></i>'; }
       el.innerHTML = `💻 系统：${iconSystem} ${system}<br>🌐 浏览器：${iconBrowser} ${browser}`;
     }
 
+    // 🚀 调用 AbuseIPDB API
     async function fetchAbuseInfo(ip) {
       try {
-        const res = await fetch(`https://api.abuseipdb.com/api/v2/check?ipAddress=${encodeURIComponent(ip)}&maxAgeInDays=90`, {
-          headers: { 'Key': ABUSE_API_KEY, 'Accept': 'application/json' }
+        const res = await fetch(`https://api.abuseipdb.com/api/v2/check?ipAddress=${ip}&maxAgeInDays=90`, {
+          headers: { "Key": ABUSE_API_KEY, "Accept": "application/json" }
         });
-        const json = await res.json();
-        const score = Number(json.data?.abuseConfidenceScore || 0);
-        const usage = json.data?.usageType || '未知';
-        const purity = Math.max(0, Math.min(100, 100 - score));
-        return { ok: true, purityPercent: purity, usageText: usage, isHosting: /hosting|data center|datacenter|transit|cloud/i.test(usage) };
-      } catch { return { ok: false, purityPercent: null }; }
-    }
+        const data = await res.json();
+        if(!data || !data.data) return "⚠️ 无法检测纯净度";
 
-    function renderPurityInfo(result, container) {
-      container.innerHTML = '';
-      if (!result?.ok || result.purityPercent === null) { container.innerHTML = '<span style="color:#ff5555;">⚠️ 无法检测纯净度</span>'; return; }
-      const label = document.createElement('div');
-      label.textContent = `🛡️ 纯净度：${result.purityPercent}%`;
-      label.className = result.purityPercent >= 70 ? 'purity-green' : result.purityPercent >= 20 ? 'purity-yellow' : 'purity-red';
-      container.appendChild(label);
-      const bar = document.createElement('div'); bar.className = 'purity-bar'; bar.setAttribute('role','progressbar'); bar.setAttribute('aria-valuemin','0'); bar.setAttribute('aria-valuemax','100'); bar.setAttribute('aria-valuenow',result.purityPercent);
-      const fill = document.createElement('div'); fill.className = 'purity-fill'; fill.style.width = result.purityPercent + '%'; fill.style.background = result.purityPercent >= 70 ? '#00e676' : result.purityPercent >= 20 ? '#ffeb3b' : '#ff5252';
-      bar.appendChild(fill); container.appendChild(bar);
-      const typeLine = document.createElement('div'); typeLine.style.marginTop='8px'; typeLine.textContent = `🏢 类型：${result.isHosting ? '机房 / 数据中心' : '家庭原生IP'}`;
-      container.appendChild(typeLine);
-      const usageLine = document.createElement('div'); usageLine.style.opacity='0.85'; usageLine.textContent = `📋 用途标记：${result.usageText}`; container.appendChild(usageLine);
+        const score = data.data.abuseConfidenceScore;
+        const usage = data.data.usageType || "未知";
+        const purity = 100 - score;
+
+        // 🔍 更强机房判断
+        const hostingKeywords = ["hosting", "datacenter", "data center", "transit", "cloud"];
+        const isHosting = hostingKeywords.some(k => usage.toLowerCase().includes(k));
+
+        return `
+          🛡️ 纯净度：${purity}%<br>
+          🏢 类型：${isHosting ? "机房 / 数据中心" : "家庭原生IP"}<br>
+          📋 用途标记：${usage}
+        `;
+      } catch {
+        return "⚠️ 无法检测纯净度";
+      }
     }
 
     async function loadMyIP() {
-      const el = document.getElementById('myIpInfo');
-      const purityBox = document.getElementById('myIpPurity');
-      purityBox.innerHTML = '';
+      const el = document.getElementById("myIpInfo");
+      const loadingEl = document.getElementById("myIpLoading");
       try {
-        const resIp = await fetch('https://api.ipify.org?format=json');
+        const resIp = await fetch("https://api.ipify.org?format=json");
         const { ip } = await resIp.json();
         const ipVersion = getIPVersion(ip);
         const res = await fetch(`https://ipapi.co/${ip}/json`);
         const data = await res.json();
-        const flagUrl = data.country_code ? `https://flagcdn.com/w40/${String(data.country_code).toLowerCase()}.png` : '';
+        if(data.error) throw new Error(data.reason || "查询失败");
+        const flagUrl = data.country_code ? `https://flagcdn.com/w40/${data.country_code.toLowerCase()}.png` : '';
         const flagImg = flagUrl ? `<img src="${flagUrl}" alt="国旗" class="flag" />` : '';
-        el.innerHTML = `📌 IP：${data.ip} (${ipVersion}) ${flagImg}<br>🌍 位置：${data.city||'-'}, ${data.region||'-'}, ${data.country_name||'-'}<br>📡 ISP：${data.org||'未知'}<br>🧭 经纬度：${data.latitude||'-'}, ${data.longitude||'-'}<br>⏰ 时区：${data.timezone||'-'}`;
-        const abuse = await fetchAbuseInfo(ip);
-        renderPurityInfo(abuse, purityBox);
-      } catch { el.innerHTML = '❌ 查询失败，请稍后再试'; purityBox.innerHTML=''; }
+        let html = `
+          📌 IP：${data.ip} (${ipVersion}) ${flagImg} <br>
+          🌍 位置：${data.city}, ${data.region}, ${data.country_name} <br>
+          📡 ISP：${data.org || '未知'} <br>
+          🧭 经纬度：${data.latitude}, ${data.longitude} <br>
+          ⏰ 时区：${data.timezone}`;
+        html += "<br>" + await fetchAbuseInfo(ip);
+        el.innerHTML = html;
+      } catch (e) {
+        el.innerText = "❌ 查询失败，请稍后再试";
+      } finally {
+        loadingEl.style.display = "none";
+      }
     }
 
-    async function queryIP() { /* 原有 queryIP 逻辑保留 */ }
-    function saveHistory(ip) { /* 原有历史记录逻辑保留 */ }
-    function renderHistory() { /* 原有历史渲染逻辑保留 */ }
+    async function queryIP() {
+      const ip = document.getElementById("ipInput").value.trim();
+      if (!ip) { alert("请输入 IP 地址！"); return; }
+      const resEl = document.getElementById("result");
+      resEl.innerHTML = '查询中... <span class="loading"></span>';
+      try {
+        const res = await fetch(`https://ipapi.co/${ip}/json`);
+        const data = await res.json();
+        if(data.error) throw new Error(data.reason || "查询失败");
+        const ipVersion = getIPVersion(ip);
+        const flagUrl = data.country_code ? `https://flagcdn.com/w40/${data.country_code.toLowerCase()}.png` : '';
+        const flagImg = flagUrl ? `<img src="${flagUrl}" alt="国旗" class="flag" />` : '';
+        let html = `
+          📌 IP：${data.ip} (${ipVersion}) ${flagImg} <br>
+          🌍 位置：${data.city}, ${data.region}, ${data.country_name} <br>
+          📡 ISP：${data.org || '未知'} <br>
+          🧭 经纬度：${data.latitude}, ${data.longitude} <br>
+          ⏰ 时区：${data.timezone}`;
+        html += "<br>" + await fetchAbuseInfo(ip);
+        resEl.innerHTML = html;
+        saveHistory(ip);
+      } catch (e) {
+        resEl.innerHTML = `<span style="color:#ff5555;">❌ 查询失败：${e.message}</span>`;
+      }
+    }
 
-    window.onload = () => { detectDevice(); renderHistory(); loadMyIP(); };
+    function getHistory() {
+      try { return JSON.parse(localStorage.getItem("ipQueryHistory")) || []; }
+      catch { return []; }
+    }
+
+    function saveHistory(ip) {
+      let history = getHistory();
+      if (!history.includes(ip)) {
+        history.unshift(ip);
+        if (history.length > 5) history.pop();
+        localStorage.setItem("ipQueryHistory", JSON.stringify(history));
+      }
+      renderHistory();
+    }
+
+    function renderHistory() {
+      const history = getHistory();
+      const container = document.getElementById("historyList");
+      if (history.length === 0) { container.innerHTML = "<em>暂无查询历史</em>"; return; }
+      container.innerHTML = "查询历史: ";
+      history.forEach(ip => {
+        const span = document.createElement("span");
+        span.textContent = ip;
+        span.onclick = () => {
+          document.getElementById("ipInput").value = ip;
+          queryIP();
+        };
+        container.appendChild(span);
+      });
+    }
+
+    window.onload = () => {
+      detectDevice();
+      loadMyIP();
+      renderHistory();
+    };
   </script>
-
 </body>
 </html>
