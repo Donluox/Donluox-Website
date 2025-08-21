@@ -116,6 +116,8 @@
       user-select: none;
       border-top: 1px solid #222;
     }
+    .residential { color: #00e676; font-weight: bold; }
+    .datacenter { color: #ff3d00; font-weight: bold; }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
@@ -123,8 +125,6 @@
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
-    .residential { color: #00e676; font-weight: bold; }
-    .datacenter { color: #ff3d00; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -154,7 +154,6 @@
 <footer>联系我: <a href="mailto:abc@donluox.dpdns.org" style="color:#00e676; text-decoration:none;">abc@donluox.dpdns.org</a></footer>
 
 <script>
-  // 系统浏览器检测
   function detectDevice() {
     const ua = navigator.userAgent;
     const el = document.getElementById("deviceInfo");
@@ -173,7 +172,6 @@
   }
   detectDevice();
 
-  // 历史记录
   let historyIPs = [];
 
   function addHistory(ip) {
@@ -188,7 +186,6 @@
     });
   }
 
-  // 查询 IP 并判断住宅 / 机房
   async function fetchIPInfo(ip, el) {
     el.innerHTML = '查询中... <span class="loading"></span>';
     try {
@@ -199,7 +196,6 @@
       let isp = data.org || '未知';
       let ipType = '住宅 IP';
       let cssClass = 'residential';
-
       const cloudKeywords = ['Amazon','AWS','Alibaba','Tencent','DigitalOcean','OVH','Google','Linode','Hetzner','Vultr'];
       for(let kw of cloudKeywords){
         if(isp.includes(kw)){
@@ -209,7 +205,13 @@
         }
       }
 
-      el.innerHTML = `IP: ${data.ip} <br> 国家: ${data.country_name || '未知'} <br> 城市: ${data.city || '未知'} <br> ISP/组织: ${isp} <br> 类型: <strong class="${cssClass}">${ipType}</strong>`;
+      el.innerHTML = `IP: ${data.ip} <br>
+        国家: ${data.country_name || '未知'} <br>
+        城市: ${data.city || '未知'} <br>
+        ISP/组织: ${isp} <br>
+        ASN: ${data.asn || '未知'} <br>
+        类型: <span class="${cssClass}">${ipType}</span>`;
+
       if(ip) addHistory(ip);
 
     } catch(err) {
