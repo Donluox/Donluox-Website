@@ -13,60 +13,66 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  padding: 30px;
+  padding: 20px;
 }
 header {
   text-align: center;
-  font-size: 2.5rem;
+  font-size: 2rem;
   color: #00e676;
   font-weight: 700;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
   text-shadow: 0 0 8px #00e676aa;
 }
 .card {
   background-color: #1e1e1e;
-  border-radius: 15px;
-  padding: 25px;
+  border-radius: 12px;
+  padding: 20px;
   margin-bottom: 20px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+  box-shadow: 0 0 12px rgba(0,0,0,0.5);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 0 20px rgba(0,230,118,0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px rgba(0,230,118,0.4);
 }
 .card h2 {
-  margin-bottom: 15px;
+  margin-bottom: 12px;
   color: #00e676;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
 }
-.input-group { margin-bottom: 20px; }
+.card h2 span {
+  margin-right: 8px;
+}
+.input-group { margin-bottom: 15px; }
 input {
   width: 100%;
-  padding: 12px;
-  border-radius: 8px;
+  padding: 10px;
+  border-radius: 6px;
   border: none;
   background-color: #222;
   color: #eee;
-  font-size: 16px;
+  font-size: 15px;
 }
 button {
   margin-top: 10px;
-  padding: 10px 20px;
+  padding: 10px 18px;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
   background-color: #00c853;
   color: #fff;
-  font-size: 16px;
+  font-size: 15px;
   transition: background 0.3s ease;
 }
 button:hover { background-color: #00e676; }
-.info { font-size: 16px; line-height: 1.6; }
-.flag { width: 28px; height: 18px; vertical-align: middle; margin-left: 6px; border-radius: 2px; box-shadow: 0 0 3px rgba(0,0,0,0.3); }
-.history-list { margin-top: 10px; font-size: 14px; color: #aaa; }
+.info { font-size: 15px; line-height: 1.6; }
+.flag { width: 24px; height: 16px; vertical-align: middle; margin-left: 6px; border-radius: 2px; box-shadow: 0 0 3px rgba(0,0,0,0.3); }
+.history-list { margin-top: 8px; font-size: 13px; color: #aaa; }
 .history-list span {
   cursor: pointer;
-  margin-right: 12px;
+  margin-right: 8px;
   padding: 2px 6px;
   border-radius: 4px;
   transition: 0.2s;
@@ -74,15 +80,22 @@ button:hover { background-color: #00e676; }
 .history-list span:hover { background-color: #222; color: #00e676; }
 .loading {
   display: inline-block;
-  width: 20px; height: 20px;
+  width: 18px; height: 18px;
   border: 3px solid #00e676;
   border-radius: 50%;
   border-top-color: transparent;
   animation: spin 1s linear infinite;
   vertical-align: middle;
-  margin-left: 10px;
+  margin-left: 8px;
 }
-footer { text-align: center; margin-top: auto; color: #777; font-size: 14px; padding: 15px 0; border-top:1px solid #222; }
+footer {
+  text-align: center;
+  margin-top: auto;
+  color: #777;
+  font-size: 13px;
+  padding: 12px 0;
+  border-top:1px solid #222;
+}
 .residential { color:#00e676; font-weight:bold; text-shadow:0 0 6px #00e676aa; }
 .datacenter { color:#ff3d00; font-weight:bold; text-shadow:0 0 6px #ff3d00aa; }
 .device-icon, .browser-icon { margin-right:6px; }
@@ -91,15 +104,15 @@ footer { text-align: center; margin-top: auto; color: #777; font-size: 14px; pad
 </head>
 <body>
 
-<header>What Is My IP</header>
+<header>🌐 What Is My IP</header>
 
 <div class="card">
-  <h2>🌐 当前 IP</h2>
+  <h2><span>📍</span> 当前 IP 查询</h2>
   <div class="info" id="myIpInfo">查询中... <span class="loading" id="myIpLoading"></span></div>
 </div>
 
 <div class="card">
-  <h2>🔍 查询其他 IP</h2>
+  <h2><span>🔎</span> 手动查询其他 IP</h2>
   <div class="input-group">
     <input type="text" id="ipInput" placeholder="输入 IP 地址">
     <button onclick="queryIP()">查询</button>
@@ -109,7 +122,7 @@ footer { text-align: center; margin-top: auto; color: #777; font-size: 14px; pad
 </div>
 
 <div class="card">
-  <h2>🖥️ 设备 / 浏览器信息</h2>
+  <h2><span>🖥️</span> 用户设备 / 浏览器</h2>
   <div class="info" id="deviceInfo">加载中...</div>
 </div>
 
@@ -136,7 +149,7 @@ detectDevice();
 
 let historyIPs=[];
 function addHistory(ip,typeClass){
-  if(!historyIPs.includes(ip)) historyIPs.push({ip,typeClass});
+  if(!historyIPs.find(item=>item.ip===ip)) historyIPs.push({ip,typeClass});
   const listEl=document.getElementById('historyList');
   listEl.innerHTML='';
   historyIPs.slice(-10).reverse().forEach(item=>{
@@ -160,7 +173,7 @@ async function fetchIPInfo(ip,el){
     const cloudKeywords=['Amazon','AWS','Alibaba','Tencent','DigitalOcean','OVH','Google','Linode','Hetzner','Vultr'];
     for(let kw of cloudKeywords){ if(isp.includes(kw)){ ipType='机房 IP'; cssClass='datacenter'; break; } }
 
-    let countryFlag=data.country_code?`<img class="flag" src="https://flagcdn.com/24x18/${data.country_code.toLowerCase()}.png" alt="${data.country_name}">`:'';
+    let countryFlag=data.country_code?`<img class=\"flag\" src=\"https://flagcdn.com/24x18/${data.country_code.toLowerCase()}.png\" alt=\"${data.country_name}\">`:'';
 
     el.innerHTML=`
       <strong>IP:</strong> ${data.ip} <br>
@@ -168,6 +181,8 @@ async function fetchIPInfo(ip,el){
       <strong>城市:</strong> ${data.city||'未知'} <br>
       <strong>ISP/组织:</strong> ${isp} <br>
       <strong>ASN:</strong> ${data.asn||'未知'} <br>
+      <strong>经纬度:</strong> ${data.latitude||'未知'}, ${data.longitude||'未知'} <br>
+      <strong>时区:</strong> ${data.timezone||'未知'} <br>
       <strong>类型:</strong> <span class="${cssClass}">${ipType}</span>
     `;
     if(ip) addHistory(ip,cssClass);
