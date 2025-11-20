@@ -3,11 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>What Is My IP</title>
+<title>What Is My IP - Pro</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-<!-- 引入地图样式 -->
+<!-- 地图样式 -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
+/* --- 核心样式 --- */
 body {
   background: #0d1117;
   color: #fff;
@@ -34,8 +35,7 @@ header {
   box-shadow: 0 0 12px rgba(0,0,0,0.5);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   max-width: 800px;
-  margin-left: auto; 
-  margin-right: auto;
+  margin-left: auto; margin-right: auto;
   width: 100%;
   box-sizing: border-box;
 }
@@ -53,9 +53,9 @@ header {
   border-bottom: 1px solid #333;
   padding-bottom: 10px;
 }
-.card h2 span {
-  margin-right: 8px;
-}
+.card h2 span { margin-right: 8px; }
+
+/* 输入框组 */
 .input-group { margin-bottom: 15px; display: flex; gap: 10px; }
 input {
   flex: 1;
@@ -68,7 +68,7 @@ input {
   outline: none;
 }
 input:focus { border-color: #00e676; }
-button {
+button.search-btn {
   padding: 10px 18px;
   border: none;
   border-radius: 6px;
@@ -79,11 +79,54 @@ button {
   transition: background 0.3s ease;
   white-space: nowrap;
 }
-button:hover { background-color: #00e676; }
+button.search-btn:hover { background-color: #00e676; }
+
+/* 信息展示 */
 .info { font-size: 15px; line-height: 1.8; }
 .flag { width: 24px; height: auto; vertical-align: middle; margin-left: 6px; border-radius: 2px; }
-.history-list { margin-top: 10px; font-size: 13px; color: #aaa; }
-.history-list span {
+
+/* --- 纯净度标签样式 --- */
+.badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-left: 5px;
+    vertical-align: middle;
+}
+.badge-green { color: #00e676; background: rgba(0,230,118,0.1); border: 1px solid rgba(0,230,118,0.3); }
+.badge-red { color: #ff5252; background: rgba(255,82,82,0.1); border: 1px solid rgba(255,82,82,0.3); }
+.badge-yellow { color: #ffab00; background: rgba(255,171,0,0.1); border: 1px solid rgba(255,171,0,0.3); }
+
+/* --- 外部工具按钮组 --- */
+.tool-links {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.tool-btn {
+  flex: 1;
+  text-align: center;
+  padding: 8px 12px;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 6px;
+  color: #ccc;
+  text-decoration: none;
+  font-size: 13px;
+  transition: 0.2s;
+}
+.tool-btn:hover {
+  background: #333;
+  color: #fff;
+  border-color: #00e676;
+}
+.tool-btn i { margin-right: 5px; }
+
+/* 历史记录 */
+.history-list { margin-top: 15px; font-size: 13px; color: #aaa; }
+.history-tag {
   cursor: pointer;
   margin-right: 8px;
   padding: 3px 8px;
@@ -94,7 +137,10 @@ button:hover { background-color: #00e676; }
   margin-bottom: 5px;
   transition: 0.2s;
 }
-.history-list span:hover { border-color: #00e676; color: #00e676; }
+.history-tag:hover { border-color: #00e676; color: #00e676; }
+
+/* 地图与加载 */
+#map { width: 100%; height: 250px; margin-top: 15px; border-radius: 8px; display: none; }
 .loading {
   display: inline-block;
   width: 18px; height: 18px;
@@ -105,29 +151,8 @@ button:hover { background-color: #00e676; }
   vertical-align: middle;
   margin-left: 8px;
 }
-footer {
-  text-align: center;
-  margin-top: auto;
-  color: #777;
-  font-size: 13px;
-  padding: 12px 0;
-}
-
-/* 新增：类型标签样式 */
-.badge {
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: bold;
-    margin-left: 5px;
-}
-.type-res { color: #00e676; background: rgba(0,230,118,0.1); border: 1px solid rgba(0,230,118,0.3); }
-.type-dc { color: #ff5252; background: rgba(255,82,82,0.1); border: 1px solid rgba(255,82,82,0.3); }
-
-/* 地图容器 */
-#map { width: 100%; height: 200px; margin-top: 15px; border-radius: 8px; display: none; }
-.device-icon, .browser-icon { margin-right:6px; width: 20px; text-align: center;}
-
+.device-icon { margin-right:6px; width: 20px; text-align: center; }
+footer { text-align: center; margin-top: auto; color: #777; font-size: 13px; padding: 12px 0; }
 @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
@@ -135,78 +160,165 @@ footer {
 
 <header>🌐 What Is My IP</header>
 
+<!-- 1. 当前 IP 卡片 -->
 <div class="card">
   <h2><span>📍</span> 当前网络环境</h2>
   <div class="info" id="myIpInfo">查询中... <span class="loading"></span></div>
 </div>
 
+<!-- 2. 手动查询卡片 -->
 <div class="card">
   <h2><span>🔎</span> 手动查询其他 IP</h2>
   <div class="input-group">
     <input type="text" id="ipInput" placeholder="输入 IP 地址">
-    <button onclick="queryIP()">查询</button>
+    <button class="search-btn" onclick="queryIP()">查询</button>
   </div>
+  
+  <!-- 结果显示区域 -->
   <div class="info" id="result"></div>
-  <!-- 地图显示位置 -->
+  
+  <!-- 地图 -->
   <div id="map"></div>
+  
+  <!-- 历史记录 -->
   <div class="history-list" id="historyList"></div>
 </div>
 
+<!-- 3. 设备信息卡片 -->
 <div class="card">
   <h2><span>🖥️</span> 用户设备 / 浏览器</h2>
   <div class="info" id="deviceInfo">加载中...</div>
 </div>
 
-<footer>联系我: <a href="mailto:abc@donluox.dpdns.org" style="color:#00e676; text-decoration:none;">abc@donluox.dpdns.org</a></footer>
+<footer>
+  联系我: <a href="mailto:donluox@protonmail.com" style="color:#00e676; text-decoration:none;">donluox@protonmail.com</a>
+</footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-// 1. 设备检测 (保持原样)
-function detectDevice() {
-  const ua = navigator.userAgent;
-  const el = document.getElementById("deviceInfo");
-  let system="未知系统", browser="未知浏览器";
-  let sysIcon='<i class="fa-solid fa-desktop device-icon"></i>';
-  let brIcon='<i class="fa-solid fa-globe browser-icon"></i>';
+
+// --- 功能 1: IP 类型分析函数 ---
+function analyzeIpType(isp, org, asn) {
+  const text = (isp + " " + org + " " + asn).toLowerCase();
   
-  if(/Android/i.test(ua)){ system="Android"; sysIcon='<i class="fab fa-android device-icon"></i>'; }
-  else if(/iPhone|iPad/i.test(ua)){ system="iOS"; sysIcon='<i class="fab fa-apple device-icon"></i>'; }
-  else if(/Windows/i.test(ua)){ system="Windows"; sysIcon='<i class="fab fa-windows device-icon"></i>'; }
-  else if(/Macintosh/i.test(ua)){ system="macOS"; sysIcon='<i class="fab fa-apple device-icon"></i>'; }
+  // 机房关键词
+  const dcKeywords = [
+    'cloud', 'hosting', 'vps', 'server', 'data center', 'datacenter',
+    'amazon', 'aws', 'google', 'microsoft', 'azure', 'digitalocean', 'linode', 'vultr',
+    'alibaba', 'tencent', 'huawei', 'ucloud', 'choopa', 'hetzner', 'ovh', 
+    'leaseweb', 'zenlayer', 'host', 'm247', 'xtom', 'misaka', 'oracle'
+  ];
 
-  if(/Chrome/i.test(ua)){ browser="Chrome"; brIcon='<i class="fab fa-chrome browser-icon"></i>'; }
-  else if(/Firefox/i.test(ua)){ browser="Firefox"; brIcon='<i class="fab fa-firefox browser-icon"></i>'; }
-  else if(/Safari/i.test(ua) && !/Chrome/i.test(ua)){ browser="Safari"; brIcon='<i class="fab fa-safari browser-icon"></i>'; }
-  else if(/Edg/i.test(ua)){ browser="Edge"; brIcon='<i class="fab fa-edge browser-icon"></i>'; }
+  // 住宅关键词
+  const resKeywords = [
+    'telecom', 'cable', 'dsl', 'fiber', 'broadband', 'internet', 'mobile', 
+    'comcast', 'verizon', 'at&t', 'spectrum', 'virgin', 'vodafone', 't-mobile', 
+    'china telecom', 'china unicom', 'china mobile', 'hkt', 'pccw', 'kt corporation'
+  ];
 
-  el.innerHTML = `${sysIcon}${system} &nbsp;|&nbsp; ${brIcon}${browser}`;
-}
-detectDevice();
+  let type = "未知类型";
+  let badgeClass = "badge-yellow"; 
+  let desc = "无法确定类型";
 
-// 2. IP 类型检测逻辑 (新增功能)
-function getIpType(isp, org) {
-  const text = (isp + " " + org).toLowerCase();
-  const dcKeywords = ['cloud','vps','hosting','server','datacenter','alibaba','tencent','amazon','aws','google','azure','digitalocean','linode','vultr','ovh','hetzner'];
-  
-  for(let kw of dcKeywords) {
-    if(text.includes(kw)) return { name: '机房/数据中心', class: 'type-dc', desc: '可能为代理或爬虫 IP' };
+  const isDC = dcKeywords.some(kw => text.includes(kw));
+  const isRes = resKeywords.some(kw => text.includes(kw));
+
+  if (isDC) {
+    type = "🏢 机房/数据中心";
+    badgeClass = "badge-red";
+    desc = "疑似代理或 VPN，风控值可能较高";
+  } else if (isRes) {
+    type = "🏠 住宅 ISP";
+    badgeClass = "badge-green";
+    desc = "原生 IP，通常较为纯净";
+  } else {
+    type = "🏢 企业/组织";
+    desc = "可能是企业专线";
   }
-  return { name: '住宅/ISP', class: 'type-res', desc: '原生 IP' };
+
+  return { type, badgeClass, desc };
 }
 
-// 3. 历史记录 (优化版)
+// --- 功能 2: 获取 IP 信息与渲染 ---
+async function fetchIPInfo(ip, el, isManual = false){
+  el.innerHTML = '查询中... <span class="loading"></span>';
+  if(isManual) document.getElementById('map').style.display = 'none';
+
+  try {
+    const url = ip ? `https://ipapi.co/${ip}/json/` : 'https://ipapi.co/json/';
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("API 请求过快，请稍后");
+    const data = await res.json();
+
+    if(data.error) throw new Error(data.reason || "IP 无效");
+
+    // 核心分析
+    const analysis = analyzeIpType(data.org || '', data.isp || '', data.asn || '');
+    const countryFlag = data.country_code ? `<img class="flag" src="https://flagcdn.com/24x18/${data.country_code.toLowerCase()}.png">` : '';
+
+    // 渲染主信息
+    let htmlContent = `
+      <div><strong>IP 地址:</strong> ${data.ip}</div>
+      <div><strong>归属地:</strong> ${data.country_name||'未知'} ${countryFlag} - ${data.city||''}</div>
+      <div><strong>运营商:</strong> ${data.org || data.isp}</div>
+      <div><strong>纯净度:</strong> <span class="badge ${analysis.badgeClass}">${analysis.type}</span> <span style="color:#888; font-size:13px;">(${analysis.desc})</span></div>
+      <div><strong>时区:</strong> ${data.timezone}</div>
+    `;
+
+    // 如果是手动查询，添加外部工具按钮
+    if (isManual) {
+      htmlContent += `
+        <div class="tool-links">
+          <a href="https://scamalytics.com/ip/${data.ip}" target="_blank" class="tool-btn" title="查看欺诈分数"><i class="fa-solid fa-shield-halved"></i> Scamalytics</a>
+          <a href="https://whoer.net/check?host=${data.ip}" target="_blank" class="tool-btn" title="检查伪装度"><i class="fa-solid fa-user-secret"></i> Whoer</a>
+          <a href="https://bgp.he.net/ip/${data.ip}" target="_blank" class="tool-btn" title="BGP 路由信息"><i class="fa-solid fa-network-wired"></i> BGP.he.net</a>
+        </div>
+      `;
+      
+      if (data.latitude && data.longitude) updateMap(data.latitude, data.longitude, data.city);
+      addHistory(data.ip);
+    }
+
+    el.innerHTML = htmlContent;
+
+  } catch(err) {
+    el.innerHTML = `<span style="color:#ff5252"><i class="fa-solid fa-triangle-exclamation"></i> 查询失败: ${err.message}</span>`;
+  }
+}
+
+// --- 功能 3: 地图显示 ---
+let map = null, marker = null;
+function updateMap(lat, lon, text) {
+    const mapDiv = document.getElementById('map');
+    mapDiv.style.display = 'block';
+    if(!map) {
+        map = L.map('map').setView([lat, lon], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
+          attribution: '&copy; OpenStreetMap',
+          maxZoom: 18 
+        }).addTo(map);
+    } else {
+        map.setView([lat, lon], 13);
+    }
+    if(marker) map.removeLayer(marker);
+    marker = L.marker([lat, lon]).addTo(map).bindPopup(`<b>${text}</b>`).openPopup();
+    setTimeout(() => { map.invalidateSize(); }, 300);
+}
+
+// --- 功能 4: 历史记录 ---
 let historyIPs=[];
 function addHistory(ip){
-  if(historyIPs.includes(ip)) return;
+  historyIPs = historyIPs.filter(item => item !== ip);
   historyIPs.unshift(ip);
   if(historyIPs.length > 8) historyIPs.pop();
   
-  const listEl=document.getElementById('historyList');
-  listEl.innerHTML='历史记录: ';
-  historyIPs.forEach(item=>{
-    const span=document.createElement('span');
-    span.textContent=item;
-    span.onclick=()=>{
+  const listEl = document.getElementById('historyList');
+  listEl.innerHTML = '历史记录: ';
+  historyIPs.forEach(item => {
+    const span = document.createElement('span');
+    span.textContent = item;
+    span.className = 'history-tag';
+    span.onclick = () => {
         document.getElementById('ipInput').value = item;
         queryIP();
     };
@@ -214,66 +326,38 @@ function addHistory(ip){
   });
 }
 
-// 4. 地图相关
-let map = null, marker = null;
-function updateMap(lat, lon, text) {
-    const mapDiv = document.getElementById('map');
-    mapDiv.style.display = 'block';
-    if(!map) {
-        map = L.map('map').setView([lat, lon], 13);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap' }).addTo(map);
-    } else {
-        map.setView([lat, lon], 13);
-    }
-    if(marker) map.removeLayer(marker);
-    marker = L.marker([lat, lon]).addTo(map).bindPopup(text).openPopup();
-    setTimeout(() => { map.invalidateSize(); }, 300);
+// --- 功能 5: 设备检测 ---
+function detectDevice() {
+  const ua = navigator.userAgent;
+  const el = document.getElementById("deviceInfo");
+  let system="未知系统", browser="未知浏览器";
+  let sysIcon='<i class="fa-solid fa-desktop device-icon"></i>';
+  let brIcon='<i class="fa-solid fa-globe device-icon"></i>';
+  
+  if(/Android/i.test(ua)){ system="Android"; sysIcon='<i class="fab fa-android device-icon"></i>'; }
+  else if(/iPhone|iPad/i.test(ua)){ system="iOS"; sysIcon='<i class="fab fa-apple device-icon"></i>'; }
+  else if(/Windows/i.test(ua)){ system="Windows"; sysIcon='<i class="fab fa-windows device-icon"></i>'; }
+  else if(/Macintosh/i.test(ua)){ system="macOS"; sysIcon='<i class="fab fa-apple device-icon"></i>'; }
+
+  if(/Chrome/i.test(ua)){ browser="Chrome"; brIcon='<i class="fab fa-chrome device-icon"></i>'; }
+  else if(/Firefox/i.test(ua)){ browser="Firefox"; brIcon='<i class="fab fa-firefox device-icon"></i>'; }
+  else if(/Safari/i.test(ua) && !/Chrome/i.test(ua)){ browser="Safari"; brIcon='<i class="fab fa-safari device-icon"></i>'; }
+
+  el.innerHTML = `${sysIcon}${system} &nbsp;|&nbsp; ${brIcon}${browser}`;
 }
 
-// 5. 查询核心
-async function fetchIPInfo(ip, el, isManual = false){
-  el.innerHTML='查询中... <span class="loading"></span>';
-  try{
-    const url = ip ? `https://ipapi.co/${ip}/json/` : 'https://ipapi.co/json/';
-    const res = await fetch(url);
-    const data = await res.json();
-
-    if(data.error) throw new Error(data.reason);
-
-    // 获取 IP 类型
-    const ipType = getIpType(data.isp || '', data.org || '');
-    const countryFlag = data.country_code ? `<img class="flag" src="https://flagcdn.com/24x18/${data.country_code.toLowerCase()}.png">` : '';
-
-    // 渲染 HTML (保持原有的简洁风格)
-    el.innerHTML=`
-      <strong>IP 地址:</strong> ${data.ip} <br>
-      <strong>归属地:</strong> ${data.country_name||'未知'} ${countryFlag} - ${data.city||''} <br>
-      <strong>运营商:</strong> ${data.org || data.isp} <br>
-      <strong>纯净度:</strong> <span class="badge ${ipType.class}">${ipType.name}</span> <span style="font-size:12px; color:#888">(${ipType.desc})</span> <br>
-      <strong>经纬度:</strong> ${data.latitude}, ${data.longitude} <br>
-      <strong>时区:</strong> ${data.timezone}
-    `;
-
-    if(isManual && data.latitude && data.longitude) {
-        addHistory(data.ip);
-        updateMap(data.latitude, data.longitude, data.city);
-    }
-
-  }catch(err){ el.innerHTML='<span style="color:#ff5252">查询失败: '+err.message+'</span>'; }
-}
-
+// --- 初始化 ---
 function queryIP(){
   const ip=document.getElementById('ipInput').value.trim();
   if(!ip) return alert('请输入 IP 地址');
   fetchIPInfo(ip, document.getElementById('result'), true);
 }
 
-// 回车支持
-document.getElementById('ipInput').addEventListener('keypress', function (e) {
+document.getElementById('ipInput').addEventListener('keypress', (e) => {
     if (e.key === 'Enter') queryIP();
 });
 
-// 初始查询
+detectDevice();
 fetchIPInfo(null, document.getElementById('myIpInfo'));
 </script>
 </body>
